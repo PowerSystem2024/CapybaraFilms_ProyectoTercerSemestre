@@ -1,0 +1,42 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+.venv/
+.virtualenv/
+
+# Archivos Python compilados
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Configuración de editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Salidas de pruebas o builds
+build/
+dist/
+*.egg-info/
+
+# Archivos de logs o debug
+*.log
+
+# Configuraciones de entorno local
+*.env
+*.env.*
+.envrc
+
+# Bases de datos locales
+*.sqlite3
+
+# Carpetas de caché
+.cache/
+pytest_cache/
