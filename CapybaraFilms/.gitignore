@@ -40,3 +40,18 @@ dist/
 # Carpetas de caché
 .cache/
 pytest_cache/
+
+# Archivos de configuración de pruebas
+*.pytest_cache/
+
+# Archivos generados por Docker
+docker-compose.override.yml
+*.override.yml
+
+# Planos o configuraciones de Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Archivos de Jupyter Notebook
+.ipynb_checkpoints/
