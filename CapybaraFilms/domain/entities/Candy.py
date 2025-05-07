@@ -1,24 +1,14 @@
-package capybarafilms.domain.entities;
+from capybarafilms.domain.entities.types import TipoCandy
 
-import capybarafilms.domain.entities.types.TipoCandy;
+class Candy:
+    def __init__(self, tipo: TipoCandy):
+        """Inicializa el objeto Candy con un tipo de combo."""
+        self.tipo = tipo
 
-public class Candy {
+    def get_tipo(self) -> TipoCandy:
+        """Devuelve el tipo de combo que se ha seleccionado."""
+        return self.tipo
 
-    private TipoCandy tipo; // El tipo de combo: chico, mediano o grande.
-
-    // Constructor que recibe el tipo de combo.
-    public Candy(TipoCandy tipo) {
-        this.tipo = tipo; // Se asigna el tipo de combo.
-    }
-
-    // Devuelve el tipo de combo que se ha seleccionado.
-    public TipoCandy getTipo() {
-        return tipo; // Se devuelve el tipo de candy.
-    }
-
-    // Método para mostrar el nombre del combo cuando se imprime.
-    @Override
-    public String toString() {
-        return "Candy: " + tipo.getNombre(); // Devuelve el nombre del tipo de candy.
-    }    
-}
+    def __str__(self) -> str:
+        """Devuelve el nombre del combo cuando se imprime."""
+        return f"Candy: {self.tipo.get_nombre()}"
