@@ -1,5 +1,8 @@
-from capybarafilms.domain.entities.types import TipoButaca  # Tipo de butaca (COMUN o PREMIUM)
-from capybarafilms.domain.entities.types import Ubicacion   # Clase de ubicación
+from domain.entities.types.TipoButaca import TipoButaca  # Tipo de butaca (COMUN o PREMIUM)
+from domain.entities.types.Ubicacion import Ubicacion   # Clase de ubicación
+from domain.entities.Butaca import Butaca  # Clase de butaca
+from domain.entities.Pelicula import Pelicula  # Clase de película
+from domain.entities.types.FormatoPelicula import FormatoPelicula  # Formato de la película
 
 
 class Sala:
@@ -16,18 +19,30 @@ class Sala:
             for butaca in range(self.capacidad):
                 if self.min_premium <= fila <= self.max_premium:
                     self.butacas[fila][butaca] = Butaca(TipoButaca.PREMIUM, Ubicacion(fila, butaca))
+
                 else:
                     self.butacas[fila][butaca] = Butaca(TipoButaca.COMUN, Ubicacion(fila, butaca))
+                    
+    def mostrar_butacas(self):
+        print("Distribución de las butacas:\n")
+        for fila in range(self.capacidad): #Filas
+            for butaca in range(self.capacidad):  # columnas
+                b = self.butacas[fila][butaca]  # Obtener la butaca en la posición actual
+                # Mostrar [X] si está ocupada, o [ ] si está disponible
+                print("[X]" if b.is_estado() else "[ ]", end=" ")
+            print()  # Salto de línea después de cada fila
+        print()  # Salto de línea extra para separar la matriz
 
     def asignar_butaca(self, ubicacion):
         fila = ubicacion.get_fila()
         columna = ubicacion.get_butaca()
         if 0 <= fila < self.capacidad and 0 <= columna < self.capacidad:
             butaca = self.butacas[fila][columna]
-            if not butaca.is_estado():
-                butaca.set_estado(True)
+            if not butaca.is_estado():  # Si la butaca está disponible
+                butaca.set_estado(True)  # Marcar como ocupada
+                print(f"Butaca en fila {fila + 1}, columna {columna + 1} reservada con éxito.")
             else:
-                print("La butaca se encuentra ocupada.")
+                print("La butaca seleccionada ya está ocupada.")
         else:
             print("Fila o butaca inválidos.")
 

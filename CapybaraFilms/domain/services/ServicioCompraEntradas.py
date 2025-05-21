@@ -1,6 +1,13 @@
-from capybarafilms.domain.entities import Butaca, Candy, Catalogo, Cliente, Reserva, Sala
-from capybarafilms.domain.entities.types import Ubicacion
-from capybarafilms.domain.services.servicio_validacion import es_numero
+from domain.entities import Catalogo
+from domain.entities.types.TipoCandy import TipoCandy
+from domain.entities.Pelicula import Pelicula
+from domain.entities.Cliente import Cliente
+from domain.entities.types.Ubicacion import Ubicacion
+from domain.services.ServicioValidacion import ServicioValidacion
+from domain.entities.Candy import Candy
+from domain.entities.Reserva import Reserva
+from domain.entities.Butaca import Butaca
+from domain.entities.Sala import Sala
 
 class ServicioCompraEntradas:
     def __init__(self):
@@ -19,13 +26,14 @@ class ServicioCompraEntradas:
         for index, pelicula in enumerate(Catalogo.get_peliculas(), start=1):
             print(f"{index}) {pelicula.nombre}")
 
-    def seleccionar_pelicula(self):
+    def seleccionar_pelicula(self, cantidad_peliculas):
+        """Seleccionar una película por su número, validando la entrada del usuario"""
         while True:
             print("Seleccione el número de la película:")
             entrada_usuario = self.entrada()
-            if es_numero(entrada_usuario):
+            if ServicioValidacion.es_numero(entrada_usuario):
                 opcion = int(entrada_usuario)
-                if 1 <= opcion <= len(Catalogo.get_peliculas()):
+                if 1 <= opcion <= cantidad_peliculas:
                     return opcion - 1
                 else:
                     print(f"Opción inválida. Elija un número entre 1 y {len(Catalogo.get_peliculas())}.")
@@ -36,7 +44,7 @@ class ServicioCompraEntradas:
         while True:
             print("¿Cuántas entradas desea comprar?")
             entrada_usuario = self.entrada()
-            if es_numero(entrada_usuario):
+            if ServicioValidacion.es_numero(entrada_usuario):
                 cantidad = int(entrada_usuario)
                 if cantidad > 0:
                     return cantidad
@@ -53,16 +61,17 @@ class ServicioCompraEntradas:
             while True:
                 try:
                     fila = int(input(f"Ingrese la fila (0 a 11) para la entrada {i+1}: "))
-                    while fila < 0 or fila >= 12:
-                        print("Número de fila no válido.")
-                        fila = int(input("Ingrese nuevamente la fila (0 a 11): "))
+                    while not (0 <= fila < 12):
+                        print("Número de fila no válido. Intente nuevamente.")
+                        fila = int(input(f"Ingrese nuevamente la fila (0 a 11): "))
 
                     butaca = int(input(f"Ingrese el número de butaca (0 a 11) para la entrada {i+1}: "))
-                    while butaca < 0 or butaca >= 12:
-                        print("Número de butaca no válido.")
-                        butaca = int(input("Ingrese nuevamente el número de butaca (0 a 11): "))
+                    while not (0 <= butaca < 12):
+                        print("Número de columna no válido. Intente nuevamente.")
+                        butaca = int(input(f"Ingrese nuevamente el número de columna (0 a 11): "))
 
                     ubicacion = Ubicacion(fila, butaca)
+
                     if sala.butaca_esta_ocupada(ubicacion):
                         print("La butaca está ocupada. Intente con otra.")
                     else:
@@ -71,7 +80,7 @@ class ServicioCompraEntradas:
                         sala.asignar_butaca(ubicacion)
                         break
                 except ValueError:
-                    print("Entrada inválida. Ingrese un número.")
+                    print("Entrada inválida. Por favor, ingrese un número.")
         return butacas_seleccionadas
 
     def mostrar_matriz_butacas(self, sala):
@@ -86,12 +95,14 @@ class ServicioCompraEntradas:
         for fila in range(filas):
             print(f"{fila} ", end="")
             for butaca in range(butacas_por_fila):
+
                 b = sala.get_butaca(Ubicacion(fila, butaca))
-                if b.estado:
-                    print("[X] ", end="")
+                if b.is_estado():
+                    print("[X]", end=" ")
                 else:
-                    print("[ ] ", end="")
+                    print("[ ]", end=" ")
             print()
+        print()
 
     def realizar_reserva(self, cliente, sala, candy, butacas):
         return Reserva(cliente, sala, candy, butacas)
@@ -103,7 +114,7 @@ class ServicioCompraEntradas:
 2) No""")
         while True:
             entrada_usuario = self.entrada()
-            if entrada_usuario.strip() and es_numero(entrada_usuario):
+            if entrada_usuario.strip() and ServicioValidacion.es_numero(entrada_usuario):
                 opcion_combo = int(entrada_usuario)
                 if opcion_combo == 1:
                     # Lógica para seleccionar el combo real debería ir aquí

@@ -2,20 +2,16 @@ from enum import Enum
 
 # Definimos el enum TipoCandy
 class TipoCandy(Enum):
-    CHICO = "Combo Chico"
-    MEDIANO = "Combo Mediano"
-    GRANDE = "Combo Grande"
+    CHICO = ("Combo Chico", 2000)
+    MEDIANO = ("Combo Mediano", 4000)
+    GRANDE = ("Combo Grande", 5000)
+
+    def __init__(self, nombre, precio):
+        self.nombre = nombre
+        self.precio = precio
 
     def get_nombre(self):
-        return self.value
+        return self.nombre
 
-# Definimos la clase Candy
-class Candy:
-    def __init__(self, tipo):
-        self.tipo = tipo  # Se asigna el tipo de combo
-    
-    def get_tipo(self):
-        return self.tipo  # Se devuelve el tipo de candy
-    
-    def __str__(self):
-        return f"Candy: {self.tipo.get_nombre()}"  # Devuelve el nombre del tipo de candy
+    def get_precio(self):
+        return self.precio
