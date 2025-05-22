@@ -2,69 +2,66 @@ from domain.services.ServicioCompraEntradas import ServicioCompraEntradas
 from domain.services.ServicioValidacion import ServicioValidacion
 from domain.entities.Pelicula import Pelicula
 from domain.entities.Sala import Sala
-from domain.entities.types.Ubicacion import Ubicacion
-from domain.entities.Butaca import Butaca
 from domain.entities.Reserva import Reserva
 
 class ComprarEntradaTest:
     def __init__(self):
-        self.servicio_compra = ServicioCompraEntradas()
-        self.servicio_validacion = ServicioValidacion()
+        try:
+            self.servicio_compra = ServicioCompraEntradas()
+            self.servicio_validacion = ServicioValidacion()
+        except Exception as e:
+            print(f"Error inicializando la aplicación: {e}")
+            exit(1)
 
     def ejecutar(self):
-        # Iniciar proceso de compra
-        print("--------------------------------------------------------------------")
-        print("Bienvenido/a al sistema de compra de entradas de Capybara Films.")
-        print("--------------------------------------------------------------------\n")
+        try:
+            # Solicitar DNI e identificar o registrar al cliente
+            while True:
+                dni = input("Ingrese su DNI: ").strip()
+                if len(dni) == 8 and dni.isdigit() and not dni.startswith("00"):
+                    break
+                print("DNI inválido. Intente nuevamente.")
 
-        # Crear instancia del cliente usando ServicioValidacion
-        cliente = self.servicio_validacion.obtener_datos_cliente()
-        print(f"Hola, {cliente.get_nombre()} {cliente.get_apellido()}.\n")
+            # Buscar al cliente en la base de datos o registrar si no existe
+            cliente = self.servicio_validacion.buscar_o_registrar_cliente(dni)
+            if not cliente:
+                print("Ocurrió un error al procesar el cliente.")
+                return
 
-        # Mostrar las opciones de películas disponibles
-        print("Películas disponibles:")
-        peliculas = [
-            Pelicula("Shrek", "Andrew Adamson", 90, "Comedia", "Español", "2D"),
-            Pelicula("Avengers: Endgame", "Russo Brothers", 181, "Acción", "Español", "3D"),
-            Pelicula("Jurassic Park", "Steven Spielberg", 127, "Ciencia Ficción", "Español", "2D"),
-        ]
+            print(f"\nBienvenido, {cliente.get_nombre()} {cliente.get_apellido()}.\n")
 
-        for index, pelicula in enumerate(peliculas, start=1):
-            print(f"{index}. {pelicula.get_nombre()} ({pelicula.get_formato()})")
+            # Continuar con el flujo de selección de películas, reserva, etc.
+            peliculas = [
+                Pelicula("Shrek", "Andrew Adamson", 90, "Comedia", "Español", "2D"),
+                Pelicula("Avengers: Endgame", "Russo Brothers", 181, "Acción", "Español", "3D"),
+                Pelicula("Jurassic Park", "Steven Spielberg", 127, "Ciencia Ficción", "Español", "2D"),
+            ]
 
-        # Seleccionar película
-        pelicula_index = self.servicio_compra.seleccionar_pelicula(len(peliculas))
-        pelicula_seleccionada = peliculas[pelicula_index]
+            print("Películas disponibles:")
+            for index, pelicula in enumerate(peliculas, start=1):
+                print(f"{index}. {pelicula.get_nombre()} ({pelicula.get_formato()})")
 
-        # Crear sala con la película seleccionada
-        sala = Sala(pelicula_seleccionada)
+            pelicula_index = self.servicio_compra.seleccionar_pelicula(len(peliculas))
+            pelicula_seleccionada = peliculas[pelicula_index]
 
-        # Mostrar matriz inicial de butacas
-        print("\nDistribución inicial de las butacas:")
-        sala.mostrar_butacas()
+            sala = Sala(pelicula_seleccionada)
+            sala.mostrar_butacas()
 
-        # Solicitar cantidad de entradas a comprar
-        cantidad_entradas = self.servicio_compra.solicitar_cantidad_entradas()
+            cantidad_entradas = self.servicio_compra.solicitar_cantidad_entradas()
+            butacas_reservadas = self.servicio_compra.seleccionar_butacas(cantidad_entradas, sala)
+            combo = self.servicio_compra.seleccionar_combo()
 
-        # Seleccionar las butacas
-        print("\nPor favor seleccione las butacas:")
-        butacas_reservadas = self.servicio_compra.seleccionar_butacas(cantidad_entradas, sala)
+            reserva = Reserva(cliente, sala, combo, butacas_reservadas)
+            reserva.mostrar_resumen()
 
-        # Solicitar combo (opcional)
-        combo = self.servicio_compra.seleccionar_combo()
+            print("\nGracias por su compra. ¡Disfrute la función!")
 
-        # Crear la reserva y mostrar resumen
-        reserva = Reserva(
-            cliente=cliente,  # Cliente ya es un objeto de la clase Cliente
-            sala=sala,
-            candy=combo,
-            butacas_asignadas=butacas_reservadas,
-        )
-        print("\nResumen de la reserva:")
-        reserva.mostrar_resumen()
-
-        print("\nGracias por su compra. ¡Disfrute la función!")
+        except Exception as e:
+            print(f"Error durante la ejecución del programa: {e}")
 
 if __name__ == "__main__":
-    comprar_entrada_test = ComprarEntradaTest()
-    comprar_entrada_test.ejecutar()
+    try:
+        comprar_entrada_test = ComprarEntradaTest()
+        comprar_entrada_test.ejecutar()
+    except Exception as e:
+        print(f"Error crítico en la aplicación: {e}")
