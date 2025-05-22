@@ -40,6 +40,10 @@ dist/
 # Carpetas de caché
 .cache/
 pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
 # Archivos de configuración de pruebas
 *.pytest_cache/
