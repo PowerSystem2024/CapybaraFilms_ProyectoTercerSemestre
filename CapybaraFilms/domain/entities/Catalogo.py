@@ -16,53 +16,22 @@ class Pelicula:
 
 class Catalogo:
     def __init__(self):
-        # Configuración de la conexión a la base de datos
         self.db_config = {
-            'dbname': 'catalogo_peliculas',  # El nombre de tu base de datos que se ve en pgAdmin
-            'user': 'postgres',              # Por defecto es 'postgres', cámbialo si usas otro
-            'password': '1234',     # La contraseña que configuraste en PostgreSQL
-            'host': 'localhost',             # Mantén localhost si la BD está en tu computadora
-            'port': '5433'                   # Puerto por defecto de PostgreSQL
+            'dbname': 'capybara_films',
+            'user': 'postgres',
+            'password': '1234',
+            'host': 'localhost',
+            'port': '5433'
         }
 
     def conectar(self):
-        """Establece la conexión con la base de datos"""
         try:
             return psycopg2.connect(**self.db_config)
         except Exception as e:
             print(f"Error al conectar a la base de datos: {e}")
             return None
 
-    def crear_tabla_peliculas(self):
-        """Crea la tabla de películas si no existe"""
-        conn = self.conectar()
-        if conn:
-            try:
-                with conn.cursor() as cur:
-                    # Primero eliminamos la tabla si existe
-                    cur.execute("DROP TABLE IF EXISTS peliculas")
-                    
-                    # Creamos la tabla desde cero
-                    cur.execute("""
-                        CREATE TABLE peliculas (
-                            id SERIAL PRIMARY KEY,
-                            nombre VARCHAR(255) NOT NULL,
-                            director VARCHAR(255) NOT NULL,
-                            duracion INTEGER NOT NULL,
-                            genero VARCHAR(100) NOT NULL,
-                            idioma VARCHAR(50) NOT NULL,
-                            formato VARCHAR(10) NOT NULL
-                        )
-                    """)
-                conn.commit()
-                print("Tabla de películas creada exitosamente")
-            except Exception as e:
-                print(f"Error al crear la tabla: {e}")
-            finally:
-                conn.close()
-
     def insertar_pelicula(self, pelicula):
-        """Inserta una película en la base de datos"""
         conn = self.conectar()
         if conn:
             try:
@@ -85,8 +54,31 @@ class Catalogo:
             finally:
                 conn.close()
 
+    def insertar_varias_peliculas(self, peliculas):
+        conn = self.conectar()
+        if conn:
+            try:
+                with conn.cursor() as cur:
+                    for pelicula in peliculas:
+                        cur.execute("""
+                            INSERT INTO peliculas (nombre, director, duracion, genero, idioma, formato)
+                            VALUES (%s, %s, %s, %s, %s, %s)
+                        """, (
+                            pelicula.nombre,
+                            pelicula.director,
+                            pelicula.duracion,
+                            pelicula.genero,
+                            pelicula.idioma,
+                            pelicula.formato.value
+                        ))
+                conn.commit()
+                print("Películas insertadas correctamente")
+            except Exception as e:
+                print(f"Error al insertar películas: {e}")
+            finally:
+                conn.close()
+
     def get_peliculas(self):
-        """Obtiene todas las películas de la base de datos"""
         conn = self.conectar()
         peliculas = []
         if conn:
@@ -110,61 +102,7 @@ class Catalogo:
                 conn.close()
         return peliculas
 
-    def inicializar_catalogo(self):
-        """Inicializa el catálogo con las películas predefinidas"""
-        # Lista completa de películas
-        peliculas = [
-            Pelicula("Shrek", "Andrew Adamson", 90, "Comedia", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Shrek 2", "Andrew Adamson", 95, "Comedia", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Titanic", "James Cameron", 195, "Drama", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Cuando el terror acecha", "John Carpenter", 100, "Terror", "Español", FormatoPelicula.DOS_D),
-            Pelicula("El Señor de los Anillos: La Comunidad del Anillo", "Peter Jackson", 178, "Aventura", "Español", FormatoPelicula.DOS_D),
-            Pelicula("El Padrino", "Francis Ford Coppola", 175, "Crimen", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Forrest Gump", "Robert Zemeckis", 142, "Drama", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Jurassic Park", "Steven Spielberg", 127, "Ciencia Ficción", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Star Wars: Episodio IV - Una Nueva Esperanza", "George Lucas", 121, "Ciencia Ficción", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Matrix", "Lana Wachowski, Lilly Wachowski", 136, "Ciencia Ficción", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Coco", "Lee Unkrich, Adrian Molina", 105, "Animación", "Español", FormatoPelicula.DOS_D),
-            Pelicula("La La Land", "Damien Chazelle", 128, "Musical", "Español", FormatoPelicula.DOS_D),
-            Pelicula("El gran Lebowski", "Joel Coen, Ethan Coen", 117, "Comedia", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Pulp Fiction", "Quentin Tarantino", 154, "Crimen", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Los Increíbles", "Brad Bird", 115, "Animación", "Español", FormatoPelicula.DOS_D),
-            Pelicula("El Rey León", "Roger Allers, Rob Minkoff", 88, "Animación", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Gladiador", "Ridley Scott", 155, "Acción", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Avatar", "James Cameron", 162, "Ciencia Ficción", "Español", FormatoPelicula.TRES_D),
-            Pelicula("Harry Potter y la piedra filosofal", "Chris Columbus", 152, "Aventura", "Español", FormatoPelicula.DOS_D),
-            Pelicula("Los Vengadores", "Joss Whedon", 143, "Acción", "Español", FormatoPelicula.DOS_D)
-        ]
-        
-        # Crear la tabla si no existe
-        self.crear_tabla_peliculas()
-        
-        # Insertar cada película
-        conn = self.conectar()
-        if conn:
-            try:
-                with conn.cursor() as cur:
-                    for pelicula in peliculas:
-                        cur.execute("""
-                            INSERT INTO peliculas (nombre, director, duracion, genero, idioma, formato)
-                            VALUES (%s, %s, %s, %s, %s, %s)
-                        """, (
-                            pelicula.nombre,
-                            pelicula.director,
-                            pelicula.duracion,
-                            pelicula.genero,
-                            pelicula.idioma,
-                            pelicula.formato.value
-                        ))
-                conn.commit()
-                print("Todas las películas han sido insertadas exitosamente")
-            except Exception as e:
-                print(f"Error al insertar películas: {e}")
-            finally:
-                conn.close()
-
     def mostrar_peliculas(self):
-        """Muestra todas las películas en la base de datos"""
         conn = self.conectar()
         if conn:
             try:
@@ -190,7 +128,6 @@ class Catalogo:
                 conn.close()
 
     def probar_conexion(self):
-        """Prueba la conexión a la base de datos"""
         try:
             conn = self.conectar()
             if conn:
@@ -201,16 +138,30 @@ class Catalogo:
             print(f"Error al conectar: {e}")
             return False
 
+# Lista de películas a insertar
+peliculas = [
+    Pelicula("Cuando el terror acecha", "John Carpenter", 100, "Terror", "Español", FormatoPelicula.DOS_D),
+    Pelicula("El Señor de los Anillos: La Comunidad del Anillo", "Peter Jackson", 178, "Aventura", "Español", FormatoPelicula.DOS_D),
+    Pelicula("El Padrino", "Francis Ford Coppola", 175, "Crimen", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Forrest Gump", "Robert Zemeckis", 142, "Drama", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Jurassic Park", "Steven Spielberg", 127, "Ciencia Ficción", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Star Wars: Episodio IV - Una Nueva Esperanza", "George Lucas", 121, "Ciencia Ficción", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Matrix", "Lana Wachowski, Lilly Wachowski", 136, "Ciencia Ficción", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Coco", "Lee Unkrich, Adrian Molina", 105, "Animación", "Español", FormatoPelicula.DOS_D),
+    Pelicula("La La Land", "Damien Chazelle", 128, "Musical", "Español", FormatoPelicula.DOS_D),
+    Pelicula("El gran Lebowski", "Joel Coen, Ethan Coen", 117, "Comedia", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Pulp Fiction", "Quentin Tarantino", 154, "Crimen", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Los Increíbles", "Brad Bird", 115, "Animación", "Español", FormatoPelicula.DOS_D),
+    Pelicula("El Rey León", "Roger Allers, Rob Minkoff", 88, "Animación", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Gladiador", "Ridley Scott", 155, "Acción", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Avatar", "James Cameron", 162, "Ciencia Ficción", "Español", FormatoPelicula.TRES_D),
+    Pelicula("Harry Potter y la piedra filosofal", "Chris Columbus", 152, "Aventura", "Español", FormatoPelicula.DOS_D),
+    Pelicula("Los Vengadores", "Joss Whedon", 143, "Acción", "Español", FormatoPelicula.DOS_D),
+]
+
 # Ejemplo de uso
 if __name__ == "__main__":
     catalogo = Catalogo()
-    
-    # Inicializar el catálogo con todas las películas
-    print("Inicializando el catálogo...")
-    catalogo.inicializar_catalogo()
-    
-    # Mostrar todas las películas
-    catalogo.mostrar_peliculas()
-
-    # Y luego probarlo así:
     catalogo.probar_conexion()
+    catalogo.insertar_varias_peliculas(peliculas)
+    catalogo.mostrar_peliculas()
