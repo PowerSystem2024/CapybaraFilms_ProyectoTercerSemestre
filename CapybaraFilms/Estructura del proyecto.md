@@ -18,12 +18,5 @@ carpinchos_programando/
 │   │   ├── catalogo.py         # Clase Catálogo
 │   ├── services/               # Servicios del sistema (procesos de negocio)
 │   │   ├── servicio_validacion.py  # Servicio de validación de datos
-│   │   ├── servicio_compra.py      # Servicio de compra de entradas
-│
-├── test/                       # Pruebas del sistema
-│   ├── test_cliente.py         # Pruebas para la clase Cliente
-│   ├── test_reserva.py         # Pruebas para la clase Reserva
-│   ├── test_compra.py          # Pruebas para los servicios de Compra
-│
-└── utils/                      # Utilidades comunes
-    ├── helpers.py              # Funciones auxiliares (validaciones, formato, etc.)
+│   │   └── servicio_compra.py      # Servicio de compra de entradas
+

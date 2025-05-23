@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres_capybara
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: catalogo_peliculas
+    ports:
+      - "5433:5432"  # Mapeo del puerto (Puerto local: 5433, Puerto contenedor: 5432)
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - capybara_net
+
+  app:
+    build:
+      context: .  # Directorio actual donde se encuentra el Dockerfile
+      dockerfile: Dockerfile
+    container_name: app_capybara
+    depends_on:
+      - db  # Esperar a que el servicio `db` esté activo antes de levantar este servicio
+    environment:
+      DB_HOST: db  # El servicio `db` será resolvible por este nombre dentro de la red
+      DB_PORT: 5432
+      DB_NAME: capybara_films
+      DB_USER: postgres
+      DB_PASSWORD: admin
+    networks:
+      - capybara_net
+    # Puedes habilitar puertos para desarrollo si usas Flask/Django o APIs en un futuro
+    ports:
+      - "5000:5000"  # Mapeo de puerto para APIs si alguna vez desarrollas una (Opcional)
+
+volumes:
+  db_data:  # Volumen persistente para almacenar datos de PostgreSQL
+
+networks:
+  capybara_net:  # Red para que los servicios `app` y `db` se comuniquen

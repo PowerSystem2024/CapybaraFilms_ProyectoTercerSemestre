@@ -1,17 +1,23 @@
-from capybarafilms.domain.entities.types import FormatoPelicula
+from domain.entities.types.FormatoPelicula import FormatoPelicula  # Importar correctamente el enum
 
 class Pelicula:
-    def __init__(self, nombre: str, director: str, duracion: int, genero: str, idioma: str, formato: FormatoPelicula):
-        """Inicializa todos los atributos de la película."""
+    def __init__(self, nombre, director, duracion, genero, idioma, formato):
         self.nombre = nombre
         self.director = director
         self.duracion = duracion
         self.genero = genero
         self.idioma = idioma
-        self.formato = formato
+        # Usar el método para obtener el miembro del enum por su valor
+        self.formato = self.convertir_formato(formato)
 
-    def get_nombre(self) -> str:
-        """Devuelve el nombre de la película."""
+    def convertir_formato(self, formato):
+        """Convierte un valor como '2D' o '3D' en un miembro del enum FormatoPelicula."""
+        for miembro in FormatoPelicula:
+            if miembro.get_tipo() == formato:
+                return miembro
+        raise ValueError(f"Formato inválido: {formato}")  # Lanzar una excepción si el formato no es válido
+
+    def get_nombre(self):
         return self.nombre
 
     def set_nombre(self, nombre: str):
