@@ -24,7 +24,7 @@ class ServicioValidacion:
                     nombre=cliente_fila[0],  # Columna 'nombre'
                     apellido=cliente_fila[1],  # Columna 'apellido'
                     dni=cliente_fila[3],  # Columna 'dni'
-                    eMail=cliente_fila[2],  # Columna 'eMail'
+                    email=cliente_fila[2],  # Columna 'email'
                 )
             else:
                 # Cliente no encontrado, registrar nuevo
@@ -32,18 +32,18 @@ class ServicioValidacion:
                 nombre = input("Ingrese su nombre: ").strip()
                 apellido = input("Ingrese su apellido: ").strip()
                 while True:
-                    correo = input("Ingrese su correo electrónico: ").strip()
-                    if "@" in correo and correo.endswith(".com"):
+                    email = input("Ingrese su correo electrónico: ").strip()
+                    if "@" in email and email.endswith(".com"):
                         break
                     print("Correo electrónico inválido. Intente nuevamente.")
 
                 # Insertar nuevo cliente
                 self.db_connection.ejecutar_consulta(
-                    "INSERT INTO cliente (nombre, apellido, eMail, dni) VALUES (%s, %s, %s, %s)",
-                    (nombre, apellido, correo, dni)
+                    "INSERT INTO cliente (nombre, apellido, dni, email) VALUES (%s, %s, %s, %s)",
+                    (nombre, apellido, email, dni)
                 )
                 print(f"Cliente registrado correctamente. Bienvenido, {nombre} {apellido}.")
-                return Cliente(nombre, apellido, dni, correo)
+                return Cliente(nombre, apellido, dni, email)
         except Exception as e:
             print(f"Error en buscar_o_registrar_cliente: {e}")
             return None
