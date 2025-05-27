@@ -3,6 +3,7 @@ from domain.services.ServicioValidacion import ServicioValidacion
 from domain.entities.Pelicula import Pelicula
 from domain.entities.Sala import Sala
 from domain.entities.Reserva import Reserva
+from domain.entities.Butaca import Butaca
 
 class ComprarEntradaTest:
     def __init__(self):
