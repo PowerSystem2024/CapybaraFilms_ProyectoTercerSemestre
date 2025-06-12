@@ -1,14 +1,14 @@
 from domain.entities.types.FormatoPelicula import FormatoPelicula  # Importar correctamente el enum
 
 class Pelicula:
-    def __init__(self, nombre, director, duracion, genero, idioma, formato):
+    def __init__(self, id_pelicula, nombre, director, duracion, genero, idioma, formato):
+        self.id_pelicula = id_pelicula
         self.nombre = nombre
         self.director = director
         self.duracion = duracion
         self.genero = genero
         self.idioma = idioma
-        # Usar el método para obtener el miembro del enum por su valor
-        self.formato = self.convertir_formato(formato)
+        self.formato = formato
 
     def convertir_formato(self, formato):
         """Convierte un valor como '2D' o '3D' en un miembro del enum FormatoPelicula."""
@@ -64,6 +64,5 @@ class Pelicula:
         """Establece un nuevo formato a la película."""
         self.formato = formato
 
-    def __str__(self) -> str:
-        """Devuelve una representación en texto de la película."""
-        return f"Pelicula {{ nombre: '{self.nombre}', director: '{self.director}', duracion: {self.duracion}, genero: '{self.genero}', idioma: '{self.idioma}', formato: {self.formato} }}"
+    def __str__(self):
+        return f"Pelicula({self.id_pelicula}, {self.nombre}, {self.director}, {self.duracion}, {self.genero}, {self.idioma}, {self.formato})"
