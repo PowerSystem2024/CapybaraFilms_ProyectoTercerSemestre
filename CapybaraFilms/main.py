@@ -1,68 +1,94 @@
-from domain.services.ServicioCompraEntradas import ServicioCompraEntradas
-from domain.services.ServicioValidacion import ServicioValidacion
-from domain.entities.Pelicula import Pelicula
-from domain.entities.Sala import Sala
-from domain.entities.Reserva import Reserva
-# from domain.entities.Butaca import Butaca
+from daos.ClienteDAO import ClienteDAO
+from daos.PeliculaDAO import PeliculaDAO
+from daos.SalaDAO import SalaDAO
+from daos.ButacaDAO import ButacaDAO
+from daos.ReservaDAO import ReservaDAO
+from data.DatabaseConnection import DatabaseConnection
+from services.cine_services import CineServices
+from daos.CandyDAO import CandyDAO
 
-class ComprarEntradaTest:
-    def __init__(self):
+def main():
+    try:
+        # Inicializar conexión a la base de datos y DAOs
+        db_connection = DatabaseConnection()
+        cliente_dao = ClienteDAO(db_connection)
+        pelicula_dao = PeliculaDAO(db_connection)
+        sala_dao = SalaDAO(db_connection)
+        butaca_dao = ButacaDAO(db_connection)
+        reserva_dao = ReservaDAO(db_connection)
+        candy_dao = CandyDAO(db_connection)
+        cine_services = CineServices()
+        pelicula = None
+
+        # Mensaje de bienvenida
+        print("-----------------------------------------------------------------")
+        print("*              Bienvenido/a a Capybara's Films!               *")
+        print("-----------------------------------------------------------------\n")
+        print("*           Disfruta de la mejor experiencia de cine.          *")
+        print("\nA continuación ingresa tus datos para adquirir las entradas a la función de cine.\n")
+
+        # Paso 1: Verificar cliente (con creación y validación)
+        cliente = cine_services.verificar_y_validar_cliente(cliente_dao)
+        if not cliente:
+            print("❌ No se puede continuar sin un cliente registrado.")
+            return
+        cine_services.limpiar_pantalla()
+
+        # Paso 2: Seleccionar película
+        pelicula = cine_services.elegir_pelicula(pelicula_dao)
+        if not pelicula:
+            print("❌ No se seleccionó ninguna película.")
+            return
+        cine_services.limpiar_pantalla()
+
+        # Paso 3: Seleccionar sala y entradas
+        sala, cantidad_entradas = cine_services.seleccionar_sala_y_entradas(sala_dao, butaca_dao, pelicula)
+        if not sala or cantidad_entradas == 0:
+            print("❌ No se seleccionó ninguna sala o entradas.")
+            return
+        cine_services.limpiar_pantalla()
+
+        # Paso 4: Seleccionar butacas
+        butacas_seleccionadas = cine_services.seleccionar_butacas(butaca_dao, cantidad_entradas, sala)
+        if not butacas_seleccionadas:
+            print("❌ No se seleccionaron butacas válidas.")
+            return
+        ids_butacas_seleccionadas = [butaca.id_butaca for butaca in butacas_seleccionadas]
+        cine_services.limpiar_pantalla()
+
+        # Paso 5: Confirmar reserva
+        reserva = reserva_dao.crear_reserva(cliente.id_cliente, sala.id_sala, ids_butacas_seleccionadas)
+        if not reserva:
+            print("❌ No se pudo crear la reserva. Asegúrese de que los datos sean correctos.")
+            return
+        cine_services.limpiar_pantalla()
+
+        # Paso 6: Seleccionar combos (opcional)
+        combos_seleccionados = cine_services.seleccionar_combos(candy_dao)
+        if combos_seleccionados:
+            print("\n=== Combos Seleccionados ===")
+            for combo in combos_seleccionados:
+                print(f"- {combo.get_nombre()} - Precio: {combo.get_precio()}")
+        else:
+            print("No se seleccionaron combos.")
+        cine_services.limpiar_pantalla()
+        
+        # Asociar los combos seleccionados a la reserva
+        reserva.candy = combos_seleccionados
+
+        # Paso 7: Imprimir resumen de la reserva
+        reserva.mostrar_resumen()
+
+        # Mensaje final
+        print(f"✔ ¡Compra exitosa! Gracias por visitar Capybara Films, {cliente.nombre}.")
+
+    except Exception as e:
+        print(f"⚠ Se produjo un error crítico en la aplicación: {e}")
+    finally:
         try:
-            self.servicio_compra = ServicioCompraEntradas()
-            self.servicio_validacion = ServicioValidacion()
+            db_connection.cerrar_conexion()
         except Exception as e:
-            print(f"Error inicializando la aplicación: {e}")
-            exit(1)
-
-    def ejecutar(self):
-        try:
-            # Solicitar DNI e identificar o registrar al cliente
-            while True:
-                dni = input("Ingrese su DNI: ").strip()
-                if len(dni) == 8 and dni.isdigit() and not dni.startswith("00"):
-                    break
-                print("DNI inválido. Intente nuevamente.")
-
-            # Buscar al cliente en la base de datos o registrar si no existe
-            cliente = self.servicio_validacion.buscar_o_registrar_cliente(dni)
-            if not cliente:
-                print("Ocurrió un error al procesar el cliente.")
-                return
-
-            print(f"\nBienvenido, {cliente.get_nombre()} {cliente.get_apellido()}.\n")
-
-            # Continuar con el flujo de selección de películas, reserva, etc.
-            peliculas = [
-                Pelicula("Shrek", "Andrew Adamson", 90, "Comedia", "Español", "2D"),
-                Pelicula("Avengers: Endgame", "Russo Brothers", 181, "Acción", "Español", "3D"),
-                Pelicula("Jurassic Park", "Steven Spielberg", 127, "Ciencia Ficción", "Español", "2D"),
-            ]
-
-            print("Películas disponibles:")
-            for index, pelicula in enumerate(peliculas, start=1):
-                print(f"{index}. {pelicula.get_nombre()} ({pelicula.get_formato()})")
-
-            pelicula_index = self.servicio_compra.seleccionar_pelicula(len(peliculas))
-            pelicula_seleccionada = peliculas[pelicula_index]
-
-            sala = Sala(pelicula_seleccionada)
-            sala.mostrar_butacas()
-
-            cantidad_entradas = self.servicio_compra.solicitar_cantidad_entradas()
-            butacas_reservadas = self.servicio_compra.seleccionar_butacas(cantidad_entradas, sala)
-            combo = self.servicio_compra.seleccionar_combo()
-
-            reserva = Reserva(cliente, sala, combo, butacas_reservadas)
-            reserva.mostrar_resumen()
-
-            print("\nGracias por su compra. ¡Disfrute la función!")
-
-        except Exception as e:
-            print(f"Error durante la ejecución del programa: {e}")
+            print(f"⚠ Error cerrando la conexión a la base de datos: {e}")
 
 if __name__ == "__main__":
-    try:
-        comprar_entrada_test = ComprarEntradaTest()
-        comprar_entrada_test.ejecutar()
-    except Exception as e:
-        print(f"Error crítico en la aplicación: {e}")
+    main()
