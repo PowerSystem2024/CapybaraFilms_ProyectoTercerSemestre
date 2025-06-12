@@ -1,99 +1,72 @@
-# Importación de Clases
-# Clase Ubicación
-from domain.entities.types.Ubicacion import Ubicacion
+from datetime import datetime
+from domain.entities.types.TipoButaca import TipoButaca
 from domain.entities.Cliente import Cliente
-from domain.entities.Butaca import Butaca
+from domain.entities.types.TipoCandy import TipoCandy
 from domain.entities.Sala import Sala
 
 class Reserva:
-    # Método inicializador de la reserva con el cliente, sala, combo(candy) y butacas
-    def __init__(self, cliente, sala, candy, butacas_asignadas):
-        # Cliente -> Persona que realiza la reserva
-        self.cliente = cliente
-        # Sala -> donde se proyectará la película
-        self.sala = sala
-        # Candy -> Combo comprado (puede ser 'None')
-        self.candy = candy
-        # Butacas Asignadas -> Lista de las butacas reservadas
-        self.butacas_asignadas = butacas_asignadas  # Lista de butacas reservadas
+    def __init__(self, cliente, sala, candy=None, butacas_asignadas=None, fecha_hora=None, id_reserva=None):
+        self.id_reserva = id_reserva  # Identificador único de la reserva (opcional, asignado por la BD).
+        self.cliente = cliente       # Referencia al objeto Cliente.
+        self.sala = sala             # Referencia al objeto Sala.
+        self.candy = candy           # Referencia al objeto Candy (puede ser None).
+        self.butacas_asignadas = butacas_asignadas if butacas_asignadas else []
+        self.fecha_hora = fecha_hora if fecha_hora else datetime.now()
 
-    # Métodos Getter
-    # Método para obtener la sala de la reserva.
-    def get_sala(self):
-        return self.sala
-    
-    # Método para obtener el combo de la reserva (puede ser 'None').
-    def get_candy(self):
-        return self.candy
-    
-    # Método para obtener el cliente de la reserva.
-    def get_cliente(self):
-        return self.cliente
-
-    # Método que calcula el precio total de la reserva.
-    def get_precio_total(self):
-        # Inicializa el total en cero
+    def calcular_precio_total(self):
         total = 0.0
-        
-        # Ciclo for
-        for butaca in self.butacas_asignadas:
-            # Obtiene de la ubicación de la butaca.
-            ubicacion = butaca.get_ubicacion()
-            
-            # Sentencia if
-            if ubicacion is not None:
-                # Suma el precio de la entrada
-                total += self.sala.precio_de_entrada(ubicacion)
-            else:
-                # Mensaje de error
-                print("Error: La ubicación de la butaca es nula.")
-        
-        # Sentencia if
-        if self.candy is not None:
-            # Suma el precio del combo si existe
-            total += self.candy.get_tipo().get_precio()
 
-        # Devuelve el total calculado
+        # Sumar el precio de las butacas reservadas
+        for butaca in self.butacas_asignadas:
+            try:
+                total += TipoButaca[butaca.get_categoria().upper()].get_precio()
+            except Exception as e:
+                print(f"Error al calcular precio de la butaca: {e}")
+
+        # Sumar el costo de candy (si aplica)
+        if self.candy:
+            for candy in self.candy:
+                try:
+                    total += candy.get_precio()
+                except Exception as e:
+                    print(f"Error al calcular precio del combo: {e}")
+
         return total
-
-    # Método que muestra un resumen de la reserva.
+    
     def mostrar_resumen(self):
-        print("----------------------------------------------")
-        print("--    Resumen de la Reserva:    --")
-        print("----------------------------------------------")
-        print(f"Cliente: {self.cliente.get_nombre()} {self.cliente.get_apellido()}")
-        print(f"Sala: {str(self.sala)}")
-        print("Butacas Reservadas:")
+        from services.cine_services import CineServices
+        try:
+            print("\n----------------------------------------------")
+            print("--           Resumen de la Reserva           --")
+            print("----------------------------------------------")
+            print(f"Cliente: {self.cliente.get_nombre()} {self.cliente.get_apellido()}")
+            print(f"Correo electrónico: {self.cliente.get_email()}")
+            print(f"Sala asignada: {self.sala.id_sala}")
 
-        # Inicializa el total de entradas
-        total_entradas = 0.0
-        
-        # Ciclo for
-        for butaca in self.butacas_asignadas:
-            tipo = butaca.get_categoria().get_nombre()
-            precio_entrada = self.sala.precio_de_entrada(butaca.get_ubicacion())
-            total_entradas += precio_entrada
-            
-            print(f" - Fila: {butaca.get_ubicacion().get_fila()}, "
-                f"Butaca: {butaca.get_ubicacion().get_butaca()} | "
-                f"Tipo: {tipo} | "
-                f"Precio: {precio_entrada}")
-            print("-----------------------------------------------------")
-        
-        # Sentencia if
-        # Si se eligió el combo
-        if self.candy is not None:
-            precio_combo = self.candy.get_tipo().get_precio()
-            print(f"Combo elegido: {self.candy.get_tipo().get_nombre()} | "
-                f"Precio: {precio_combo}")
-        # Si no se eligió ningún combo (None)
-        else:
-            print("No se eligió combo.")
-        
-        # Calcula el total de todo (entradas y combo(candy))
-        total = total_entradas + (self.candy.get_tipo().get_precio() if self.candy is not None else 0)
-        
-        print("--------------------------------------------------------")
-        print(f"Total a Pagar: {total}")
-        print("--------------------------------------------------------")
-        print(f"Usted recibirá su comprobante al correo electrónico: {self.cliente.get_email()}")
+            # Resumen de butacas reservadas
+            print("\nButacas Reservadas:")
+            total_butacas = 0  # Para acumular el precio de las butacas reservadas
+            for butaca in self.butacas_asignadas:
+                # Usar la función `obtener_precio_por_categoria` desde cine_services
+                precio = CineServices.obtener_precio_por_categoria(butaca.get_categoria())
+                total_butacas += precio
+                print(f" - Fila: {butaca.get_fila()}, Columna: {butaca.get_columna()} | Categoria: {butaca.get_categoria()} | Precio: {precio}")
+
+            # Combos seleccionados
+            print("\nCombos Seleccionados:")
+            total_combos = 0  # Para acumular el precio de los combos seleccionados
+            if self.candy:
+                for candy in self.candy:
+                    print(f" - {candy.get_nombre()} | Precio: {candy.get_precio()}")
+                    total_combos += candy.get_precio()
+            else:
+                print("No se seleccionaron combos.")
+            # Calcular el total general
+            total = total_butacas + total_combos
+            print("\n----------------------------------------------")
+            print(f"Total a Pagar: {total}")
+            print("----------------------------------------------")
+            print(f"Usted recibirá su comprobante al correo electrónico: {self.cliente.get_email()}\n")
+
+        except Exception as e:
+            print(f"Error al mostrar el resumen de la reserva: {e}")

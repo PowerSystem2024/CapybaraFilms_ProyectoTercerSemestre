@@ -1,25 +1,34 @@
 class Butaca:
-    def __init__(self, categoria, ubicacion):
-        self.ubicacion = ubicacion  # Asigna la ubicación de la butaca (fila, número).
-        self.categoria = categoria  # Asigna el tipo de butaca (común o premium).
-        self.estado = False  # Por defecto, la butaca está libre (estado = False).
-
+    def __init__(self,id_butaca,fila, columna,categoria,estado=False):
+        self.id_butaca = id_butaca
+        self.categoria = categoria
+        self.fila = fila
+        self.columna = columna
+        self.estado = estado
+        
     def set_estado(self, estado):
-        #Cambia el estado de la butaca (ocupada o libre)
         self.estado = estado
 
     def get_categoria(self):
-        #Devuelve el tipo de butaca.
         return self.categoria
-
+    
     def is_estado(self):
-        #Verifica si la butaca está ocupada (True) o libre (False)
         return self.estado
 
     def get_ubicacion(self):
-        #Devuelve la ubicación de la butaca (fila y número)
         return self.ubicacion
+    
+    def set_categoria(self, categoria):
+        self.categoria = categoria
 
     def set_ubicacion(self, ubicacion):
-        #Cambia la ubicación de la butaca
         self.ubicacion = ubicacion
+    
+    def get_fila(self):
+        return self.fila
+    
+    def get_columna(self):
+        return self.columna
+
+    def __str__(self):
+        return f"Categoria: {self.categoria}, Ubicacion: {self.ubicacion}, Estado: {'Ocupada' if self.estado else 'Libre'}"
