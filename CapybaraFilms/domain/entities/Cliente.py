@@ -1,14 +1,12 @@
 import psycopg2
 
 class Cliente:
-    def __init__(self, nombre, apellido, dni, email):
-
-        # Constructor que inicializa los atributos del cliente
-        self.nombre = nombre  # Almacena el nombre
-        self.apellido = apellido  # Almacena el apellido
-        self.dni = dni  # Almacena el DNI
-        self.email = email  # Almacena el email
-
+    def __init__(self, id_cliente=None, dni=None, nombre=None, apellido=None, email=None):
+        self.id_cliente = id_cliente
+        self.dni = dni
+        self.nombre = nombre
+        self.apellido = apellido
+        self.email = email
 
     # Métodos:
     # obtener el nombre del cliente
@@ -53,43 +51,4 @@ class Cliente:
 
     # Método que devuelve una representación en texto del cliente
     def __str__(self):
-        return f"Cliente: \n  Nombre: {self.nombre}\n  Apellido: {self.apellido}\n  DNI: {self.dni}\n  email: {self.email}"
-
-
-# ----------------------------------------
-# BASE DE DATOS
-# ----------------------------------------
-
-def conectar_bd():
-    try:
-        conexion = psycopg2.connect(
-            dbname="capybara_films",
-            user="postgres",
-            password="admin",
-            host="localhost",
-            port="5432"
-        )
-        return conexion
-    except Exception as e:
-        print("Error al conectar a la base de datos:", e)
-        return None
-
-def guardar_cliente_en_bd(cliente):
-    conn = conectar_bd()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            query = """
-                INSERT INTO cliente (nombre, apellido, dni, "email")
-                VALUES (%s, %s, %s, %s)
-            """
-            cursor.execute(query, (cliente.get_nombre(), cliente.get_apellido(), cliente.get_dni(), cliente.get_email()))
-            conn.commit()
-            cursor.close()
-            conn.close()
-            print("Cliente guardado correctamente.")
-        except Exception as e:
-            print("Error al guardar el cliente:", e)
-
-#cliente1 = Cliente("Maria", "Acosta", "42338065", "macosta23@email.com")
-#guardar_cliente_en_bd(cliente1)
+        return f"Cliente({self.id_cliente}, {self.dni}, {self.nombre}, {self.apellido}, {self.email})"
