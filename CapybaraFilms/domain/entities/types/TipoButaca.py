@@ -1,8 +1,8 @@
 from enum import Enum
 
 class TipoButaca(Enum):
-    COMUN = ("comun", 2000)  # Tipo de butaca común con un precio de 2000
-    PREMIUM = ("premium", 3500)  # Tipo de butaca premium con un precio de 3500
+    COMUN = ("comun", 4000)  # Tipo de butaca común con un precio de 2000
+    PREMIUM = ("premium", 6500)  # Tipo de butaca premium con un precio de 3500
 
     def __init__(self, nombre, precio):
         self.nombre = nombre  # Nombre del tipo de butaca
