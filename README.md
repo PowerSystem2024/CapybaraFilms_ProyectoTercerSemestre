@@ -1,52 +1,69 @@
-# Capybara Films - Proyecto Tercer Semestre
+# 🎥 Capybara Films - Proyecto Tercer Semestre
+## ¡Bienvenido al sistema de gestión de cine más adorable del mundo!
+Desarrollado por Carpinchos Programando ![carpincho](https://github.com/user-attachments/assets/34c61984-7f45-403c-a3ae-a57dd16a27bf)
+💻 en Python.
 
-Capybara Films es una aplicación de gestión de cine desarrollada por **Carpinchos Programando** en Python como parte de un proyecto académico del tercer semestre. 
+---
 
-### Funcionalidades de la aplicación:
-- Registro de usuarios.
-- Selección de películas y asignación automática de sala.
-- Elección de tipo de asiento (Premium o Común).
-- Compra de entradas.
-- Compra de combos de bebidas y pochoclos (Candy).
-- Generación de tickets con los detalles de la compra:
-  - Película seleccionada.
-  - Asiento.
-  - Combo de Candy.
-  - Precio total a pagar.
+## ✨ Funcionalidades
+### **📌 Registro de usuarios**
+### **🎬 Selección de películas + asignación automática de sala**
+### **💺 Elección de asientos (Premium 🛋️ o Común 🪑)**
+### **🎟️ Compra de entradas**
+### **🍿 Combos de Candy (bebidas + pochoclos)**
+### **🖨️ Generación de tickets con:**
+  - Película
+  - Asiento
+  - Combo
+  - Precio total
 
-### Tecnologías utilizadas:
-- **Lenguaje**: Python
-- **Frameworks/Librerías**: Flask
-- **Base de datos**: PostgreSQL
+---
 
-### Instalación:
+## 🛠️ Tecnologías
+| Área          | Tecnología      |
+|---------------|-----------------|
+| **Lenguaje**  | Python 🐍       |
+| **Backend**   | Flask 🌐        |
+| **Base de Datos** | PostgreSQL 🐘 |
+
+---
+
+## 📥 Instalación
 1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/CapybaraFilms_ProyectoTercerSemestre.git
-   ´´´
-### Accede al directorio del poyecto: 
-    ```bash
-    cd CapybaraFilms_ProyectoTercerSemestre
-     ´´´
-### Crea y activa un entorno virtual (opcional pero recomendado):
-    ```bash
-    python -m venv env
-    source env/bin/activate  # En Windows: env\Scripts\activate
-     ´´´
-### Instala las dependencias necesarias:
-    ```bash
-    pip install -r requirements.txt
-     ´´´
-### Ejecuta la aplicación:
-    ```bash
-     python comprarEntradaTest.py
-     ´´´
 
-## Uso:
-1. Regístrate en la aplicación.
-2. Selecciona la película de tu preferencia y escoge la comodidad del asiento.
-3. Añade un combo del Candy si lo deseas.
-4. Recibe el ticket con los detalles de tu compra.
+       git clone https://github.com/CapybaraFilms_ProyectoTercerSemestre.git
+2.  Accede al directorio:
 
-### Contribuciones:
-¡Las contribuciones son bienvenidas! Si encuentras un error o tienes una idea para mejorar el proyecto, por favor realiza un pull request.
+        cd CapybaraFilms_ProyectoTercerSemestre
+3.  Entorno virtual (recomendado):
+
+        python -m venv venv
+        source venv/bin/activate  # Windows: venv\Scripts\activate
+4.  Instala dependencias:
+
+        pip install -r requirements.txt
+5.  ¡Ejecuta la app!
+
+        python main.py
+
+---
+
+## 🎮 Uso
+```mermaid
+graph TD
+    A[Registro] --> B[Seleccionar Película] 
+    B --> C[Elegir Asiento]
+    C --> D[Añadir Combo 🍿]
+    D --> E[Generar Ticket 🎟️]
+```
+
+## 🤝 Contribuciones
+### ¡Aceptamos *pull* requests con:
+  - 🔧 Correcciones
+  - ✨ Mejoras de diseño
+  - 🚀 Nuevas features
+
+---
+
+## ¿Listo para disfrutar del cine? 🎬🍿
+## ¡Gracias por elegir Capybara Films! ![carpincho](https://github.com/user-attachments/assets/34c61984-7f45-403c-a3ae-a57dd16a27bf) 💙
