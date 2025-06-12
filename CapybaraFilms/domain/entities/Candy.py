@@ -8,7 +8,7 @@ class Candy:
         return self.tipo  # Devuelve el tipo de candy
 
     def __str__(self):
-        return f"Candy: {self.tipo.get_nombre()}"  # Muestra el nombre del candy
+        return f"Candy: {TipoCandy.get_nombre()}"  # Muestra el nombre del candy
 
     @staticmethod
     def obtener_combo():
