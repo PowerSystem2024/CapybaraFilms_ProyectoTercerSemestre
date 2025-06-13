@@ -6,19 +6,39 @@ from domain.entities.Sala import Sala
 
 class Reserva:
     def __init__(self, cliente, sala, candy=None, butacas_asignadas=None, fecha_hora=None, id_reserva=None):
+        """
+        Constructor de la clase Reserva.
+        
+        Args:
+            cliente (Cliente): Objeto que representa al cliente que hace la reserva
+            sala (Sala): Objeto que representa la sala de cine
+            candy (list, optional): Lista de objetos Candy (combos de comida). Defaults to None.
+            butacas_asignadas (list, optional): Lista de butacas reservadas. Defaults to None.
+            fecha_hora (datetime, optional): Fecha y hora de la reserva. Si es None, usa la fecha/hora actual.
+            id_reserva (str, optional): Identificador único de la reserva. Normalmente asignado por la BD.
+        """
         self.id_reserva = id_reserva  # Identificador único de la reserva (opcional, asignado por la BD).
         self.cliente = cliente       # Referencia al objeto Cliente.
         self.sala = sala             # Referencia al objeto Sala.
         self.candy = candy           # Referencia al objeto Candy (puede ser None).
-        self.butacas_asignadas = butacas_asignadas if butacas_asignadas else []
-        self.fecha_hora = fecha_hora if fecha_hora else datetime.now()
+        self.butacas_asignadas = butacas_asignadas if butacas_asignadas else []  # Lista de butacas, vacía si no se proporciona
+        self.fecha_hora = fecha_hora if fecha_hora else datetime.now()  # Fecha actual si no se especifica
 
     def calcular_precio_total(self):
+        """
+        Calcula el precio total de la reserva sumando:
+        - El precio de todas las butacas reservadas
+        - El precio de los combos de candy (si existen)
+        
+        Returns:
+            float: Precio total de la reserva
+        """
         total = 0.0
 
         # Sumar el precio de las butacas reservadas
         for butaca in self.butacas_asignadas:
             try:
+                # Obtiene el precio según la categoría de la butaca (usando el enum TipoButaca)
                 total += TipoButaca[butaca.get_categoria().upper()].get_precio()
             except Exception as e:
                 print(f"Error al calcular precio de la butaca: {e}")
@@ -34,6 +54,15 @@ class Reserva:
         return total
     
     def mostrar_resumen(self):
+        """
+        Muestra por pantalla un resumen detallado de la reserva con formato legible.
+        Incluye:
+        - Información del cliente
+        - Detalles de la sala
+        - Listado de butacas con sus precios
+        - Combos seleccionados (si hay)
+        - Total a pagar
+        """
         from services.cine_services import CineServices
         try:
             print("\n----------------------------------------------")
@@ -61,6 +90,7 @@ class Reserva:
                     total_combos += candy.get_precio()
             else:
                 print("No se seleccionaron combos.")
+            
             # Calcular el total general
             total = total_butacas + total_combos
             print("\n----------------------------------------------")
