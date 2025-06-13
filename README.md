@@ -1,5 +1,8 @@
 # 🎥 Capybara Films - Proyecto Tercer Semestre
-## ¡Bienvenido al sistema de gestión de cine más adorable del mundo!
+**¡Bienvenido al sistema de gestión de cine más adorable del mundo!**
+
+![CapybaraFilmas](https://raw.githubusercontent.com/PowerSystem2024/CarpinchosProgramando/d38e011f571cc5a66af363f15337da5ee0e43b05/TECNICATURA/PORTAFOLIO/INDIVIDUAL/MercedesAtim/Clase1/assets/Proyecto%20Integrador%20Programacion%20III.gif)
+
 Desarrollado por Carpinchos Programando ![carpincho](https://github.com/user-attachments/assets/34c61984-7f45-403c-a3ae-a57dd16a27bf)
 💻 en Python.
 
