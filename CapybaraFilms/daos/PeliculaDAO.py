@@ -1,11 +1,13 @@
 from domain.entities.Pelicula import Pelicula
+from data.DatabaseConnection import DatabaseConnection
 import psycopg2
 
-class PeliculaDAO:
-    def __init__(self, db_connection):
-        self.db = db_connection
+class PeliculaDAO: # Todas las clases DAO son clases que permiten interactuar con la base de datos.
+    def __init__(self, db_connection: DatabaseConnection): # El metodo init recibe como parámetro un objeto de la clase DatabaseConnection
+        self.db = db_connection # este atributo nos permite acceder a la conexión a la base de datos
 
-    def crear_pelicula(self, pelicula: Pelicula):
+    def crear_pelicula(self, pelicula: Pelicula): # CRUD, los metodos de esta clase dao nos permiten crear, leer, actualizar y eliminar peliculas.
+        # se encarga de crear una pelicula en la base de datos
         try:
             sentencia = """
             INSERT INTO pelicula (nombre, director, duracion, genero, idioma, formato)
