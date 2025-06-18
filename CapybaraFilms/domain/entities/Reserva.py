@@ -1,3 +1,4 @@
+# Importaciones necesarias para el módulo
 from datetime import datetime
 from domain.entities.types.TipoButaca import TipoButaca
 from domain.entities.Cliente import Cliente
