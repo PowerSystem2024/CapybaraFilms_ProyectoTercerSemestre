@@ -4,9 +4,9 @@ from enum import Enum  # Importamos la clase base Enum para crear enumeraciones
 class TipoCandy(Enum):
 
     # Definimos las constantes del enum, cada una con un nombre y un precio
-    CHICO = ("Combo Chico", 5000)
-    MEDIANO = ("Combo Mediano", 8000)
-    GRANDE = ("Combo Grande", 10000)
+    CHICO = ("Combo Chico = 🍿 Pochoclo chico + 🥤 bebida 500cc", 5000)
+    MEDIANO = ("Combo Mediano = 🍿 Pochoclo mediano + 2 🥤 bebidas 500cc", 8000)
+    GRANDE = ("Combo Grande = 🍿 Pochoclo grande + 4 🥤 bebidas 500cc", 10000)
 
     # Constructor del enum. Se ejecuta para cada valor definido arriba.
     def __init__(self, nombre, precio):

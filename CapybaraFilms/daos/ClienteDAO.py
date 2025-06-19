@@ -42,12 +42,9 @@ class ClienteDAO:
         try:
             sentencia = "SELECT id_cliente, dni, nombre, apellido, email FROM cliente WHERE dni = %s"
             resultado = self.db.obtener_datos(sentencia, (dni,))
-            print(f"Resultado de buscar_por_dni para DNI {dni}: {resultado}")
-
             if resultado:
                 fila = resultado[0]
                 return Cliente(fila[0], fila[1], fila[2], fila[3], fila[4])
-            print(f"No se encontró ningún cliente con DNI {dni}.")
             return None
         except psycopg2.Error as e:
             print("Error inesperado al buscar cliente por DNI.")

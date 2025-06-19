@@ -22,7 +22,7 @@ class PeliculaDAO: # Todas las clases DAO son clases que permiten interactuar co
                 pelicula.formato,
             )
             self.db.ejecutar_consulta(sentencia, valores)
-            print(f"Película creada correctamente: {pelicula.nombre}")
+            print(f"😍🎞️ Película creada correctamente: {pelicula.nombre}")
         except psycopg2.Error as e:
             print("Error inesperado al crear película.")
             print(f"Detalles: {e}")
@@ -34,10 +34,10 @@ class PeliculaDAO: # Todas las clases DAO son clases que permiten interactuar co
             if resultado:
                 fila = resultado[0]
                 return Pelicula(*fila) # el * permite desempaquetar la tupla directamente en los parámetros del constructor de Pelicula
-            print(f"No se encontró ninguna película con ID {id_pelicula}.")
+            print(f" 😞 No se encontró ninguna película con ID {id_pelicula}.")
             return None
         except psycopg2.Error as e:
-            print("Error al buscar película.")
+            print("😞 Error al buscar película.")
             print(f"Detalles: {e}")
             return None
 
@@ -68,7 +68,7 @@ class PeliculaDAO: # Todas las clases DAO son clases que permiten interactuar co
                 pelicula.id_pelicula,
             )
             self.db.ejecutar_consulta(sentencia, valores)
-            print(f"Película actualizada correctamente: {pelicula.nombre}")
+            print(f"😍Película actualizada correctamente: {pelicula.nombre}")
         except psycopg2.Error as e:
             print("Error inesperado al actualizar película.")
             print(f"Detalles: {e}")

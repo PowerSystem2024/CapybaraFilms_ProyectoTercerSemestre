@@ -17,13 +17,13 @@ class Candy:
             TipoCandy.MEDIANO,
             TipoCandy.GRANDE,
         ]
-        print("Seleccione el combo deseado:")
+        print("👨‍👩‍👧‍👦🍿🥤  Seleccione el combo deseado:")
         for producto, combo in enumerate(combos, start=1):
             print(f"[{producto}] {combo.get_nombre()}")
 
         while True:
             try:
-                opc = int(input("Seleccione el número de combo: "))
+                opc = int(input(" 🍿🥤  Seleccione el número de combo: "))
                 if 1 <= opc <= len(combos):
                     return Candy(combos[opc - 1])  # Crear y devolver el objeto Candy con el tipo seleccionado
                 else:

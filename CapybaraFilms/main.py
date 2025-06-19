@@ -5,6 +5,7 @@ from daos.SalaDAO import SalaDAO
 from daos.ButacaDAO import ButacaDAO
 from daos.ReservaDAO import ReservaDAO
 from daos.CandyDAO import CandyDAO
+from services.cine_services import CineServices
 
 # Conexión a la base de datos
 from data.DatabaseConnection import DatabaseConnection
@@ -30,10 +31,10 @@ def main():
 
         # Mostrar mensaje de bienvenida
         print("-----------------------------------------------------------------")
-        print("*              Bienvenido/a a Capybara's Films!               *")
+        print("*        🎥 🎞️  Bienvenido/a a Capybara's Films!  🍿🎬         *")
         print("-----------------------------------------------------------------\n")
-        print("*           Disfruta de la mejor experiencia de cine.          *")
-        print("\nA continuación ingresa tus datos para adquirir las entradas a la función de cine.\n")
+        print("*       🍿📽️  Disfruta de la mejor experiencia de cine.  😄🌟   *")
+        print("\nA continuación ingresa tus datos para adquirir las entradas 🎫 a la función de cine.\n")
 
         # Paso 1: Verificar o registrar cliente
         cliente = cine_services.verificar_y_validar_cliente(cliente_dao)
@@ -74,7 +75,7 @@ def main():
         # Paso 6: Elegir combos o golosinas (opcional)
         combos_seleccionados = cine_services.seleccionar_combos(candy_dao)
         if combos_seleccionados:
-            print("\n=== Combos Seleccionados ===")
+            print("\n=== 🥤  Combos Seleccionados 🍿 ===")
             for combo in combos_seleccionados:
                 print(f"- {combo.get_nombre()} - Precio: {combo.get_precio()}")
         else:
@@ -88,7 +89,7 @@ def main():
         reserva.mostrar_resumen()
 
         # Mensaje final al usuario
-        print(f"✔ ¡Compra exitosa! Gracias por visitar Capybara Films, {cliente.nombre}.")
+        print(f"🌟🤗  ¡Compra exitosa! Gracias por visitar Capybara Films, {cliente.nombre}. 🎉")
 
     except Exception as e:
         # Captura de errores generales del programa
