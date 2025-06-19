@@ -10,16 +10,17 @@ class ButacaDAO:
     def __init__(self, db_connection: DatabaseConnection): # Aqui se recibe la conexión a la base de datos
         self.db = db_connection
 
-    def buscar_por_id(self, id_butacas: list[int]):
+    def buscar_por_id(self, id_butacas: list[int]): #Busca una lista de butacas por sus IDs
         sentencia = f"""
         SELECT id_butaca, fila, columna, categoria, precio
         FROM butaca
         WHERE id_butaca IN ({','.join(['%s'] * len(id_butacas))})
         """
         resultado = self.db.obtener_datos(sentencia, tuple(id_butacas))
-        return [Butaca(*fila) for fila in resultado]
+        return [Butaca(*fila) for fila in resultado] #Crea una lista de objetos Butaca a partir del resultado
 
     def obtener_por_sala(self, id_sala):
+        #Devuelve una lista de butacas correspondientes a una sala
         try:
             sentencia = "SELECT fila, columna, id_butaca, categoria, estado FROM butaca WHERE id_sala = %s"
             resultado = self.db.obtener_datos(sentencia, (id_sala,))
@@ -33,7 +34,7 @@ class ButacaDAO:
 
             return [Butaca(
                         fila[3],                      # devuelve la categoria
-                        Ubicacion(fila[0], fila[1], fila[2]),  # fila, columna, butaca
+                        Ubicacion(fila[0], fila[1], fila[2]),  # fila, columna, id butaca
                         fila[4]                       # y el estado
                     ) for fila in resultado]
         except Exception as e:
@@ -41,6 +42,7 @@ class ButacaDAO:
             return []
 
     def actualizar_butaca(self, butaca: Butaca):
+        #Actualiza los datos completos de una butaca en la base de datos
         try:
             sentencia = """
             UPDATE butaca
@@ -54,6 +56,7 @@ class ButacaDAO:
             print(f"Detalles: {e}")
         
     def actualizar_estado(self, id_butaca: int, estado: bool):
+        #Actualiza solo el estado, ocupada o libre, de una butaca
         try:
             sentencia = "UPDATE butaca SET estado = %s WHERE id_butaca = %s"
             self.db.ejecutar_consulta(sentencia, (estado, id_butaca))
@@ -63,9 +66,9 @@ class ButacaDAO:
             print(f"Detalles: {e}")
     
     def butacas_por_sala(self, id_sala: int):
-        """
-        Obtiene todas las butacas de una sala específica.
-        """
+
+        # Obtiene todas las butacas de una sala específica.
+
         try:
             sentencia = "SELECT id_butaca, fila, columna, categoria, estado FROM butaca WHERE id_sala = %s"
             resultado = self.db.obtener_datos(sentencia, (id_sala,)) 
@@ -76,9 +79,9 @@ class ButacaDAO:
             return []
         
     def cantidad_butacas_disponibles(self, id_sala: int) -> int:
-        """
-        Cuenta la cantidad de butacas disponibles en una sala específica.
-        """
+
+        # Cuenta la cantidad de butacas disponibles en una sala específica.
+
         try:
             sentencia = "SELECT COUNT(*) FROM butaca WHERE id_sala = %s AND estado = TRUE"
             resultado = self.db.obtener_datos(sentencia, (id_sala,))

@@ -4,6 +4,7 @@ from data.DatabaseConnection import DatabaseConnection
 import unicodedata # Importamos la biblioteca unicodedata para manejar caracteres Unicode comocaracteres especiales.
 
 
+
 class ServicioValidacion:
     def __init__(self):
         # Inicializamos el servicio con conexión a la base de datos y DAO de clientes.
@@ -13,6 +14,7 @@ class ServicioValidacion:
         except Exception as e:
             # Mostramos un mensaje de error si no podemos inicializar el servicio correctamente.
             print(f"Error inicializando ServicioValidacion: {e}")
+
 
     def buscar_o_registrar_cliente(self, dni: str):
         """
@@ -79,6 +81,7 @@ class ServicioValidacion:
             # Mostramos un mensaje si ocurre un error inesperado en este proceso.
             print(f"⚠ Error en buscar_o_registrar_cliente: {e}")
             return None  # Retornamos None si algo falla.
+
 
     @staticmethod
     def es_solo_digitos(cadena):

@@ -22,7 +22,9 @@ class CineServices:
         
     def solicitar_cantidad_entradas(self):
         while True:
-            print("¿Cuántas entradas desea comprar?")
+
+            print("¿Cuántas entradas desea comprar? 🎟️🎟️")
+
             entrada_usuario = self.entrada()  # Leemos la entrada del usuario.
             if ServicioValidacion.es_numero(entrada_usuario):  # Verificamos si la entrada es un número válido.
                 cantidad = int(entrada_usuario)  # Convertimos la entrada en un número entero.
@@ -34,9 +36,12 @@ class CineServices:
                 print("Entrada inválida. Por favor, ingrese un número.")  # Mostramos un error si la entrada no es numérica.
 
     def mostrar_matriz_butacas(self, sala: Sala, butaca_dao: ButacaDAO): # Este método muestra todas las butacas de una sala en formato de matriz.
-        print(f"\nBuscando sala...")
+
+        print(f"\n Buscando sala 🎭🎬...")
         butacas = butaca_dao.butacas_por_sala(sala.id_sala) # Obtenemos todas las butacas de la sala con el ID dado.
-        print("\nSeleccione su butaca: ")
+        print("\nSeleccione su butaca: 🪑🍿 ")
+
+
         for fila in range(1, 13): # Recorremos las filas de la matriz de butacas, de 1 a 12.
             print(f"{fila}\t", end="") # Mostramos el número de cada fila. /t es un tabulador.
             for columna in range(1, 13): # Recorremos las columnas, de 1 a 12.
@@ -49,7 +54,11 @@ class CineServices:
     def seleccionar_combos(self, candy_dao: CandyDAO):
         # Mostramos el menú de combos y permitimos al usuario seleccionar cuántos combos desea agregar.
         combos_seleccionados = []  # Creamos una lista vacía para los combos seleccionados.
+
+        print("\n=== ❤️  Menú de Combos  🍿🥤 ===")
+
         print("\n=== Menú de Combos ===")
+
         print("¿Deseas comprar un combo de pochoclos y bebidas? \n")
         while True:  # Permitimos que el usuario elija múltiples combos.
             print("0. No agregar combo")  # Opción de no agregar más combos.
@@ -57,20 +66,27 @@ class CineServices:
                 print(f"{idx}. {tipo.get_nombre()} - Precio: {tipo.get_precio()}")  # Mostramos el nombre y el precio del combo.
 
             try:
-                opcion = int(input("\nSeleccione el combo que desea agregar (por número): "))  # Leemos la opción ingresada por el usuario.
+                opcion = int(input("\n🍿 Seleccione el combo que desea agregar (por número): "))  # Leemos la opción ingresada por el usuario.
+
                 if opcion == 0:
                     break  # Si el usuario elige 0, terminamos este proceso.
                 elif 1 <= opcion <= len(TipoCandy):  # Verificamos si la opción está dentro del rango válido.
                     combo_seleccionado = list(TipoCandy)[opcion - 1]  # Obtenemos el combo seleccionado.
                     combos_seleccionados.append(combo_seleccionado)  # Agregamos el combo a la lista.
-                    print(f"Combo '{combo_seleccionado.get_nombre()}' agregado.")
-                    print("\nDesea agregar otro combo?")
+
+                    print(f"😄 Combo '{combo_seleccionado.get_nombre()}' agregado.")
+                    print("\n 🍿  Deseas agregar otro combo?\n")
+
                 else:
                     print("❌ Opción inválida. Inténtelo nuevamente.")  # Si la opción no es válida, mostramos un error.
             except ValueError:
                 print("❌ Entrada inválida. Por favor ingrese un número válido.")  # Si el usuario ingresa algo que no es un número, mostramos un error.
         return combos_seleccionados  # Retornamos la lista de combos seleccionados.
 
+
+    def elegir_pelicula(self, pelicula_dao: PeliculaDAO): # Este método muestra al usuario todas las películas disponibles y le permite elegir una.
+        try:
+            print("\n=== 🎬🎞️  Selecciona una Película 🎥 ===")
 
     def verificar_cliente(self, cliente_dao: ClienteDAO):
         # Este método verifica si un cliente existe por su DNI. Si no existe, permite registrarlo.
@@ -111,6 +127,7 @@ class CineServices:
     def elegir_pelicula(self, pelicula_dao: PeliculaDAO): # Este método muestra al usuario todas las películas disponibles y le permite elegir una.
         try:
             print("\n=== Selecciona una Película ===")
+
             peliculas = pelicula_dao.obtener_todas() # Obtenemos todas las películas disponibles de la base de datos.
             for idx, pelicula in enumerate(peliculas, start=1): # Enumeramos las películas desde 1 para facilitar la elección.
                 print(f"{idx}. {pelicula.nombre} - {pelicula.director} ({pelicula.duracion} min) - Formato: {pelicula.formato}")
@@ -118,7 +135,10 @@ class CineServices:
 
             while True: # Repetimos hasta que el usuario seleccione una película válida.
                 try:
+
+                    opcion = int(input(f" 🎥 Seleccione una película (1-{len(peliculas)}): ")) # Pedimos al usuario que seleccione la película por su número.
                     opcion = int(input(f"Seleccione una película (1-{len(peliculas)}): ")) # Pedimos al usuario que seleccione la película por su número.
+
                     if 1 <= opcion <= len(peliculas): # Verificamos que la opción esté dentro del rango mostrado.
                         return peliculas[opcion - 1] # Retornamos la película seleccionada (se ajusta el índice a base 0).
                     else:
@@ -129,19 +149,27 @@ class CineServices:
             print(f"⚠ Error al seleccionar película: {e}") # Capturamos cualquier error inesperado.
 
 
+
+    def seleccionar_sala_y_entradas(self, sala_dao: SalaDAO, butaca_dao: ButacaDAO, pelicula: Pelicula):
+        # Este método permite seleccionar una sala para la película y la cantidad de entradas que desea comprar.
+        try:
+            print(f"\n=== 🎫🎬  Salas para la Película: {pelicula.nombre} ===\n")
+
     def seleccionar_sala_y_entradas(self, sala_dao: SalaDAO, butaca_dao: ButacaDAO, pelicula: Pelicula):
         # Este método permite seleccionar una sala para la película y la cantidad de entradas que desea comprar.
         try:
             print(f"\n=== Salas para la Película: {pelicula.nombre} ===\n")
+
             salas = sala_dao.buscar_por_pelicula(pelicula.id_pelicula) # Obtenemos todas las salas que proyectan la película.
 
             if not salas: # Si no hay salas asociadas a la película...
                 print("❌ No hay salas disponibles para la película seleccionada.")
                 return None, 0 # Retornamos un valor nulo.
 
-            cantidad_butacas_disponibles = butaca_dao.cantidad_butacas_disponibles(salas[0].id_sala) # Consultamos cuántas butacas disponibles hay en la sala.
-            cantidad_entradas = int(input("¿Cuántas entradas desea comprar? ")) # Preguntamos cuántas entradas desea comprar.
 
+            cantidad_butacas_disponibles = butaca_dao.cantidad_butacas_disponibles(salas[0].id_sala) # Consultamos cuántas butacas disponibles hay en la sala.
+            cantidad_entradas = int(input("🎫✨ ¿Cuántas entradas desea comprar? ")) # Preguntamos cuántas entradas desea comprar.
+            
             if cantidad_entradas <= 0 or cantidad_entradas > cantidad_butacas_disponibles: # Validamos que haya suficientes butacas disponibles.
                 print(f"❌ No hay suficientes entradas disponibles.")
                 return None, 0 # Retornamos valores nulos si no hay disponibilidad.
@@ -155,11 +183,12 @@ class CineServices:
 
     def _solicitar_ubicacion(self, numero_seleccion: int) -> Ubicacion:
         # Este método permite al usuario seleccionar la fila y columna de la butaca que desea ocupar.
-        print(f"\nSeleccione la ubicación de la butaca número {numero_seleccion + 1}:")
+
+        print(f"\n📍✨ Seleccione la ubicación de la butaca número {numero_seleccion + 1}:")
         while True:  # Repetimos hasta que el usuario elija una ubicación válida.
             try:
-                fila = int(input("Ingrese la fila (1-12): "))  # Pedimos la fila de la butaca.
-                columna = int(input("Ingrese la columna (1-12): "))  # Pedimos la columna de la butaca.
+                fila = int(input("🤗  Primero elegi la fila (1-12): "))  # Pedimos la fila de la butaca.
+                columna = int(input("🫶  Ahora elegi la columna (1-12): "))  # Pedimos la columna de la butaca.
 
                 if 1 <= fila <= 12 and 1 <= columna <= 12:  # Validamos que la fila y la columna estén dentro del rango permitido.
                     return Ubicacion(fila=fila, columna=columna, butaca=None)  # Creamos y retornamos una instancia de Ubicacion.
@@ -227,34 +256,40 @@ class CineServices:
 
         try:
             while True:  # Repetimos este proceso hasta obtener un cliente válido.
-                dni = input("Ingrese su DNI para verificar su existencia en el sistema: ").strip()
+                dni = input(" 🪪  Ingresa tu DNI para verificar la existencia en el sistema: ").strip()
+
                 # Eliminamos los espacios en blanco al inicio y al final del DNI ingresado.
-                
                 if not dni.isdigit() or len(dni) != 8:  # Validamos que el DNI solo contenga números y tenga exactamente 8 dígitos.
                     print("❌ El DNI debe contener exactamente 8 caracteres numéricos. Inténtelo nuevamente.")
                     continue  # Continuamos el bucle si el DNI no es válido.
 
                 cliente = cliente_dao.buscar_por_dni(dni)  # Buscamos al cliente en la base de datos usando el DNI.
                 if cliente:  # Si encontramos al cliente, mostramos un mensaje de bienvenida y lo retornamos.
-                    print(f"✔ ¡Bienvenido nuevamente {cliente.nombre} {cliente.apellido} ({cliente.email})!")
+
+                    print(f" 😍🌟  ¡Bienvenido nuevamente {cliente.nombre} {cliente.apellido} ({cliente.email})!🎉🫶🏻")
                     return cliente
                 else:  # Si no encontramos al cliente, pedimos datos para registrarlo.
-                    print("❌ No se encontró un cliente con este DNI.")
-                    opcion = input("\n¿Desea registrarse como cliente? (s/n): ").strip().lower()
+                    print(" 😞💔  No se encontró un cliente con este DNI.")
+                    opcion = input("\n ✨🏅  ¿Deseas registrarte como cliente? (s/n): ").strip().lower()
+
                     # Eliminamos espacios en blanco y convertimos la respuesta a minúsculas para evitar inconsistencias.
 
                     if opcion == "s":  # Si el usuario desea registrarse...
                         # Validamos el nombre ingresado, verificando que contenga solo letras y/o espacios.
                         while True:
-                            nombre = input("\nIngrese su nombre: ").strip()  # Pedimos el nombre del cliente.
-                            if not ServicioValidacion.es_nombre_valido(nombre):  # Usamos el servicio de validación para verificar el nombre.
+
+                            nombre = input("\n 🆔  Por favor, ingresa tu nombre: ").strip()  # Pedimos el nombre del cliente.
+
+      if not ServicioValidacion.es_nombre_valido(nombre):  # Usamos el servicio de validación para verificar el nombre.
                                 print("❌ Nombre inválido: Debe contener solo letras y espacios. Inténtelo nuevamente.")
                                 continue  # Volvemos a pedir el nombre si no es válido.
                             break  # Salimos del bucle si el nombre es válido.
 
                         # Validamos el apellido ingresado siguiendo el mismo procedimiento que para el nombre.
                         while True:
-                            apellido = input("\nIngrese su apellido: ").strip()  # Pedimos el apellido del cliente.
+
+                            apellido = input("\n ✍️  Ahora ingresá tu apellido: ").strip()  # Pedimos el apellido del cliente.
+
                             if not ServicioValidacion.es_nombre_valido(apellido):  # Validamos el apellido.
                                 print("❌ Apellido inválido: Debe contener solo letras y espacios. Inténtelo nuevamente.")
                                 continue  # Volvemos a pedir el apellido si no es válido.
@@ -262,7 +297,9 @@ class CineServices:
 
                         # Validamos el correo electrónico ingresado, verificando que tenga un formato básico válido.
                         while True:
-                            email = input("\nIngrese su correo electrónico: ").strip()  # Pedimos el correo electrónico.
+
+                            email = input("\n 📬  Y ahora ingresá tu correo electrónico: ").strip()  # Pedimos el correo electrónico.
+
                             if "@" not in email or "." not in email:  # Aseguramos que el correo contenga '@' y un dominio.
                                 print("❌ Correo inválido: Debe contener '@' y un dominio. Inténtelo nuevamente.")
                                 continue  # Volvemos a pedir el correo si no es válido.
@@ -275,12 +312,16 @@ class CineServices:
                         # Verificamos que el cliente se haya registrado correctamente.
                         cliente_creado = cliente_dao.buscar_por_dni(dni)  # Buscamos nuevamente al cliente por su DNI.
                         if cliente_creado:  # Si el cliente fue creado correctamente, damos la bienvenida.
-                            print(f"✔ Cliente registrado correctamente. ¡Bienvenido {cliente_creado.nombre} {cliente_creado.apellido}!")
+
+                            print(f" 😄🎉  Cliente registrado correctamente. ¡Bienvenido {cliente_creado.nombre} {cliente_creado.apellido}!")
+
                             return cliente_creado  # Retornamos el cliente registrado.
                         else:  # Si hubo algún problema al crear el cliente, mostramos un error.
                             print("❌ No se pudo confirmar el registro del cliente. Intente nuevamente.")
                     elif opcion == "n":  # Si el usuario no desea registrarse, mostramos un mensaje y retornamos None.
-                        print("Debe registrarse para continuar con la compra.")
+
+                        print(" 💔 Debe registrarse para continuar con la compra.")
+
                         return None
                     else:  # Si la opción ingresada no es válida, mostramos un error.
                         print("❌ Opción inválida. Intente nuevamente.")
