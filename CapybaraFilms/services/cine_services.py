@@ -57,8 +57,6 @@ class CineServices:
 
         print("\n=== ❤️  Menú de Combos  🍿🥤 ===")
 
-        print("\n=== Menú de Combos ===")
-
         print("¿Deseas comprar un combo de pochoclos y bebidas? \n")
         while True:  # Permitimos que el usuario elija múltiples combos.
             print("0. No agregar combo")  # Opción de no agregar más combos.
@@ -83,50 +81,9 @@ class CineServices:
                 print("❌ Entrada inválida. Por favor ingrese un número válido.")  # Si el usuario ingresa algo que no es un número, mostramos un error.
         return combos_seleccionados  # Retornamos la lista de combos seleccionados.
 
-
     def elegir_pelicula(self, pelicula_dao: PeliculaDAO): # Este método muestra al usuario todas las películas disponibles y le permite elegir una.
         try:
-            print("\n=== 🎬🎞️  Selecciona una Película 🎥 ===")
-
-    def verificar_cliente(self, cliente_dao: ClienteDAO):
-        # Este método verifica si un cliente existe por su DNI. Si no existe, permite registrarlo.
-        try:
-            while True:
-                dni = input("Ingrese su DNI para verificar su existencia en el sistema: ").strip()
-                # Eliminamos espacios en blanco antes y después del DNI ingresado con strip().
-                if not dni.isdigit() or len(dni) != 8:  # Validamos que el DNI solo contenga números y que tenga exactamente 8 dígitos.
-                    print("❌ El DNI debe contener exactamente 8 caracteres numéricos. Inténtelo nuevamente.")
-                    continue  # Volvemos a pedir un DNI válido.
-
-                cliente = cliente_dao.buscar_por_dni(dni)  # Buscamos al cliente en la base de datos usando su DNI.
-                if cliente:  # Si encontramos al cliente, damos la bienvenida y lo retornamos.
-                    print(f"✔ ¡Bienvenido nuevamente {cliente.nombre} {cliente.apellido} ({cliente.email})!")
-                    return cliente
-                else:  # Si no se encuentra el cliente, ofrecemos registrar uno nuevo.
-                    print("❌ No se encontró un cliente con este DNI.")
-                    opcion = input("¿Desea registrarse como cliente? (s/n): ").strip().lower()
-                    # Convertimos la opción a minúscula para facilitar la comparación.
-                    if opcion == "s":  # Si el usuario elige registrarse.
-                        nombre = input("Ingrese su nombre: ").strip()  # Le pedimos su nombre y eliminamos espacios innecesarios.
-                        apellido = input("Ingrese su apellido: ").strip()  # Pedimos el apellido.
-                        email = input("Ingrese su correo electrónico: ").strip()  # Pedimos su email.
-
-                        cliente = Cliente(None, dni, nombre, apellido, email) # Creamos un nuevo objeto cliente.
-                        cliente_dao.crear_cliente(cliente) # Guardamos el cliente en la base de datos.
-                        print(f"✔ Cliente {nombre} {apellido} registrado correctamente.")
-                        return cliente
-                    elif opcion == "n": # Si el usuario decide no registrarse, mostramos un mensaje.
-                        print("Debe registrarse para continuar con la compra.")
-                    else:
-                        print("❌ Opción inválida. Intente nuevamente.") # Si elige algo que no es ni "s" ni "n", mostramos error.
-        except ValueError as ve:
-            print(f"⚠ Error con los valores ingresados: {ve}") # Mostramos error si ocurre algo inesperado con los valores.
-        except Exception as e:
-            print(f"⚠ Error crítico durante la verificación de cliente: {e}") # Mostramos error crítico si hay un fallo general.
-
-    def elegir_pelicula(self, pelicula_dao: PeliculaDAO): # Este método muestra al usuario todas las películas disponibles y le permite elegir una.
-        try:
-            print("\n=== Selecciona una Película ===")
+            print("\n=== Selecciona una Película 🎥 ===")
 
             peliculas = pelicula_dao.obtener_todas() # Obtenemos todas las películas disponibles de la base de datos.
             for idx, pelicula in enumerate(peliculas, start=1): # Enumeramos las películas desde 1 para facilitar la elección.
@@ -137,7 +94,6 @@ class CineServices:
                 try:
 
                     opcion = int(input(f" 🎥 Seleccione una película (1-{len(peliculas)}): ")) # Pedimos al usuario que seleccione la película por su número.
-                    opcion = int(input(f"Seleccione una película (1-{len(peliculas)}): ")) # Pedimos al usuario que seleccione la película por su número.
 
                     if 1 <= opcion <= len(peliculas): # Verificamos que la opción esté dentro del rango mostrado.
                         return peliculas[opcion - 1] # Retornamos la película seleccionada (se ajusta el índice a base 0).
@@ -148,17 +104,10 @@ class CineServices:
         except Exception as e:
             print(f"⚠ Error al seleccionar película: {e}") # Capturamos cualquier error inesperado.
 
-
-
     def seleccionar_sala_y_entradas(self, sala_dao: SalaDAO, butaca_dao: ButacaDAO, pelicula: Pelicula):
         # Este método permite seleccionar una sala para la película y la cantidad de entradas que desea comprar.
         try:
             print(f"\n=== 🎫🎬  Salas para la Película: {pelicula.nombre} ===\n")
-
-    def seleccionar_sala_y_entradas(self, sala_dao: SalaDAO, butaca_dao: ButacaDAO, pelicula: Pelicula):
-        # Este método permite seleccionar una sala para la película y la cantidad de entradas que desea comprar.
-        try:
-            print(f"\n=== Salas para la Película: {pelicula.nombre} ===\n")
 
             salas = sala_dao.buscar_por_pelicula(pelicula.id_pelicula) # Obtenemos todas las salas que proyectan la película.
 
@@ -273,58 +222,53 @@ class CineServices:
                     opcion = input("\n ✨🏅  ¿Deseas registrarte como cliente? (s/n): ").strip().lower()
 
                     # Eliminamos espacios en blanco y convertimos la respuesta a minúsculas para evitar inconsistencias.
-
                     if opcion == "s":  # Si el usuario desea registrarse...
                         # Validamos el nombre ingresado, verificando que contenga solo letras y/o espacios.
                         while True:
-
                             nombre = input("\n 🆔  Por favor, ingresa tu nombre: ").strip()  # Pedimos el nombre del cliente.
 
-      if not ServicioValidacion.es_nombre_valido(nombre):  # Usamos el servicio de validación para verificar el nombre.
+                            if not ServicioValidacion.es_nombre_valido(nombre):  # Usamos el servicio de validación para verificar el nombre.
                                 print("❌ Nombre inválido: Debe contener solo letras y espacios. Inténtelo nuevamente.")
                                 continue  # Volvemos a pedir el nombre si no es válido.
                             break  # Salimos del bucle si el nombre es válido.
 
-                        # Validamos el apellido ingresado siguiendo el mismo procedimiento que para el nombre.
-                        while True:
+            # Validamos el apellido ingresado siguiendo el mismo procedimiento que para el nombre.
+                while True:
 
-                            apellido = input("\n ✍️  Ahora ingresá tu apellido: ").strip()  # Pedimos el apellido del cliente.
+                    apellido = input("\n ✍️  Ahora ingresá tu apellido: ").strip()  # Pedimos el apellido del cliente.
 
-                            if not ServicioValidacion.es_nombre_valido(apellido):  # Validamos el apellido.
-                                print("❌ Apellido inválido: Debe contener solo letras y espacios. Inténtelo nuevamente.")
-                                continue  # Volvemos a pedir el apellido si no es válido.
-                            break  # Salimos del bucle si el apellido es válido.
+                    if not ServicioValidacion.es_nombre_valido(apellido):  # Validamos el apellido.
+                        print("❌ Apellido inválido: Debe contener solo letras y espacios. Inténtelo nuevamente.")
+                        continue  # Volvemos a pedir el apellido si no es válido.
+                    break  # Salimos del bucle si el apellido es válido.
 
-                        # Validamos el correo electrónico ingresado, verificando que tenga un formato básico válido.
-                        while True:
+                # Validamos el correo electrónico ingresado, verificando que tenga un formato básico válido.
+                while True:
 
-                            email = input("\n 📬  Y ahora ingresá tu correo electrónico: ").strip()  # Pedimos el correo electrónico.
+                    email = input("\n 📬  Y ahora ingresá tu correo electrónico: ").strip()  # Pedimos el correo electrónico.
 
-                            if "@" not in email or "." not in email:  # Aseguramos que el correo contenga '@' y un dominio.
-                                print("❌ Correo inválido: Debe contener '@' y un dominio. Inténtelo nuevamente.")
-                                continue  # Volvemos a pedir el correo si no es válido.
-                            break  # Salimos del bucle si el correo es válido.
+                    if "@" not in email or "." not in email:  # Aseguramos que el correo contenga '@' y un dominio.
+                        print("❌ Correo inválido: Debe contener '@' y un dominio. Inténtelo nuevamente.")
+                        continue  # Volvemos a pedir el correo si no es válido.
+                    break  # Salimos del bucle si el correo es válido.
 
-                        # Creamos un nuevo cliente con los datos ingresados.
-                        cliente = Cliente(None, dni, nombre, apellido, email)
-                        cliente_dao.crear_cliente(cliente)  # Registramos al cliente en la base de datos.
+                # Creamos un nuevo cliente con los datos ingresados.
+                cliente = Cliente(None, dni, nombre, apellido, email)
+                cliente_dao.crear_cliente(cliente)  # Registramos al cliente en la base de datos.
 
-                        # Verificamos que el cliente se haya registrado correctamente.
-                        cliente_creado = cliente_dao.buscar_por_dni(dni)  # Buscamos nuevamente al cliente por su DNI.
-                        if cliente_creado:  # Si el cliente fue creado correctamente, damos la bienvenida.
+                # Verificamos que el cliente se haya registrado correctamente.
+                cliente_creado = cliente_dao.buscar_por_dni(dni)  # Buscamos nuevamente al cliente por su DNI.
+                if cliente_creado:  # Si el cliente fue creado correctamente, damos la bienvenida.
+                    print(f" 😄🎉  Cliente registrado correctamente. ¡Bienvenido {cliente_creado.nombre} {cliente_creado.apellido}!")
+                    return cliente_creado  # Retornamos el cliente registrado.
+                
+                elif opcion == "n":  # Si el usuario no desea registrarse, mostramos un mensaje y retornamos None.
+                    print(" 💔 Debe registrarse para continuar con la compra.")
+                    return None
+                
+                else:  # Si la opción ingresada no es válida, mostramos un error.
+                    print("❌ Opción inválida. Intente nuevamente.")
 
-                            print(f" 😄🎉  Cliente registrado correctamente. ¡Bienvenido {cliente_creado.nombre} {cliente_creado.apellido}!")
-
-                            return cliente_creado  # Retornamos el cliente registrado.
-                        else:  # Si hubo algún problema al crear el cliente, mostramos un error.
-                            print("❌ No se pudo confirmar el registro del cliente. Intente nuevamente.")
-                    elif opcion == "n":  # Si el usuario no desea registrarse, mostramos un mensaje y retornamos None.
-
-                        print(" 💔 Debe registrarse para continuar con la compra.")
-
-                        return None
-                    else:  # Si la opción ingresada no es válida, mostramos un error.
-                        print("❌ Opción inválida. Intente nuevamente.")
         except ValueError as ve:  # Capturamos errores de valores incorrectos.
             print(f"⚠ Error con los valores ingresados: {ve}")
         except Exception as e:  # Capturamos cualquier otro error crítico.
