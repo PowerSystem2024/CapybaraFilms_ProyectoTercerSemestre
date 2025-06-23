@@ -41,7 +41,6 @@ class CineServices:
         butacas = butaca_dao.butacas_por_sala(sala.id_sala) # Obtenemos todas las butacas de la sala con el ID dado.
         print("\nSeleccione su butaca: 🪑🍿 ")
 
-
         for fila in range(1, 13): # Recorremos las filas de la matriz de butacas, de 1 a 12.
             print(f"{fila}\t", end="") # Mostramos el número de cada fila. /t es un tabulador.
             for columna in range(1, 13): # Recorremos las columnas, de 1 a 12.
@@ -165,7 +164,6 @@ class CineServices:
             if not salas: # Si no hay salas asociadas a la película...
                 print("❌ No hay salas disponibles para la película seleccionada.")
                 return None, 0 # Retornamos un valor nulo.
-
 
             cantidad_butacas_disponibles = butaca_dao.cantidad_butacas_disponibles(salas[0].id_sala) # Consultamos cuántas butacas disponibles hay en la sala.
             cantidad_entradas = int(input("🎫✨ ¿Cuántas entradas desea comprar? ")) # Preguntamos cuántas entradas desea comprar.
