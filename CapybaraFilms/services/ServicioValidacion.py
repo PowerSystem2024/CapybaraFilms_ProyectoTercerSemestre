@@ -1,10 +1,6 @@
 from daos.ClienteDAO import ClienteDAO
 from data.DatabaseConnection import DatabaseConnection
 import unicodedata # Importamos la biblioteca unicodedata para manejar caracteres Unicode comocaracteres especiales.
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 class ServicioValidacion:
     def __init__(self):
         # Inicializamos el servicio con conexión a la base de datos y DAO de clientes.

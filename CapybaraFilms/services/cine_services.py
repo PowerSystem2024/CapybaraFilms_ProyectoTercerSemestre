@@ -46,42 +46,34 @@ class CineServices:
         butacas = butaca_dao.butacas_por_sala(sala.id_sala)
         print("\n 🪑🎬   Seleccione su butaca: \n\nLas filas 6, 7 y 8 son premium ⭐⭐⭐\n")
 
-       for fila in range(1, 13): # Recorremos las filas de la matriz de butacas, de 1 a 12.
-            print(f"{fila}\t", end="") # Mostramos el número de cada fila. /t es un tabulador.
-            for columna in range(1, 13): # Recorremos las columnas, de 1 a 12.
-                # Verificamos si la butaca está disponible. Si está disponible, mostramos un espacio " ", si no, mostramos "X".
-                estado = " " if self.butaca_esta_disponible(butacas, fila, columna) else "X"
-                print(f"[{estado}]", end=" ") # Mostramos la butaca en forma visual. end=" " separa los elementos en la misma línea.
-            print(f"\n") # Cambiamos de fila.
-        print("") # Salto de línea para separar la matriz de butacas de la información del cliente.
+        for fila in range(1, 13):
+            print(f"{fila}\t", end="")  # Mostramos número de fila
 
-                estado = "P" if fila in [6, 7, 8] and self.butaca_esta_disponible(butacas, fila, columna) else "X" if not self.butaca_esta_disponible(butacas, fila, columna) else " "
+            for columna in range(1, 13):
+                disponible = self.butaca_esta_disponible(butacas, fila, columna)
 
-                # Manejo especial para columnas 3 y 4 en filas 6, 7 y 8 (premium)
-                if columna == 3 and fila in [6, 7, 8]:
-                    print(f"[{estado}] [Esca", end="")
-                elif columna == 4 and fila in [6, 7, 8]:
-                    print(f"lera] [{estado}] ", end="")
-                # Manejo especial para columnas 9 y 10 en filas 6, 7 y 8 (premium)
-                elif columna == 9 and fila in [6, 7, 8]:
-                    print(f"[{estado}] [Esca", end="")
-                elif columna == 10 and fila in [6, 7, 8]:
-                    print(f"lera] [{estado}] ", end="")
-                # Manejo general para columnas 3 y 4 (escaleras)
-                elif columna == 3:
-                    print(f"[{estado}] [Esca", end="")
+                # Determinar el estado a mostrar
+                if not disponible:
+                    estado = "X"
+                elif fila in [6, 7, 8]:
+                    estado = "P"
+                else:
+                    estado = " "
+
+                # Insertar escaleras visuales entre columnas
+                if columna == 3:
+                    print(f"[{estado}] Escalera", end=" ")  # Inicio de escalera
                 elif columna == 4:
-                    print(f"lera] [{estado}] ", end="")
-                # Manejo general para columnas 9 y 10 (escaleras)
+                    print(f" [{estado}]", end=" ")  # Fin de escalera
                 elif columna == 9:
-                    print(f"[{estado}] [Esca", end="")
+                    print(f"[{estado}] Escalera", end=" ")
                 elif columna == 10:
-                    print(f"lera] [{estado}] ", end="")
+                    print(f" [{estado}]", end=" ")
                 else:
                     print(f"[{estado}]", end=" ")
 
-            print(f"\n")  # Salto de línea al final de cada fila
-        print("")
+            print("\n")  # Fin de la fila
+
 
     def seleccionar_combos(self, candy_dao: CandyDAO):
         # Mostramos el menú de combos y permitimos al usuario seleccionar cuántos combos desea agregar.
@@ -275,7 +267,6 @@ class CineServices:
                                 print("❌ Correo inválido: Debe contener '@' y un dominio. Inténtelo nuevamente.")
                                 continue
                             break  # Sale del bucle cuando el correo es válido
-                 
                 # Creamos un nuevo cliente con los datos ingresados.
                 cliente = Cliente(None, dni, nombre, apellido, email)
                 cliente_dao.crear_cliente(cliente)  # Registramos al cliente en la base de datos.
@@ -285,11 +276,11 @@ class CineServices:
                 if cliente_creado:  # Si el cliente fue creado correctamente, damos la bienvenida.
                     print(f" 😄🎉  Cliente registrado correctamente. ¡Bienvenido {cliente_creado.nombre} {cliente_creado.apellido}!")
                     return cliente_creado  # Retornamos el cliente registrado.
-                
+
                 elif opcion == "n":  # Si el usuario no desea registrarse, mostramos un mensaje y retornamos None.
                     print(" 💔 Debe registrarse para continuar con la compra.")
                     return None
-                
+
                 else:  # Si la opción ingresada no es válida, mostramos un error.
                     print("❌ Opción inválida. Intente nuevamente.")
 
