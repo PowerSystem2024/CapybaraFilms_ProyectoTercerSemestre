@@ -19,7 +19,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 class CineServices:
     def __init__(self):
         self.entrada = input # Inicializamos el servicio con la función input, que permite al usuario ingresar datos desde la consola.
-        
+
+    def limpiar_pantalla(self):
+        # Este método limpia la consola para que la experiencia del usuario sea más ordenada y agradable.
+        import os  # Importamos el módulo `os` que nos permite acceder a comandos del sistema operativo.
+        os.system('cls' if os.name == 'nt' else 'clear')
+        # Usamos el comando `cls` si estamos en Windows (`nt`) o `clear` si estamos en Linux/Mac.
+
     def solicitar_cantidad_entradas(self):
         while True:
 
@@ -35,12 +41,16 @@ class CineServices:
             else:
                 print("Entrada inválida. Por favor, ingrese un número.")  # Mostramos un error si la entrada no es numérica.
 
-    def mostrar_matriz_butacas(self, sala: Sala, butaca_dao: ButacaDAO): # Este método muestra todas las butacas de una sala en formato de matriz.
+    def mostrar_matriz_butacas(self, sala: Sala, butaca_dao: ButacaDAO):
+        print(f"\n 🎥🎭  Buscando sala...")
+        butacas = butaca_dao.butacas_por_sala(sala.id_sala)
+        print("\n 🪑🎬   Seleccione su butaca: \n\nLas filas 6, 7 y 8 son premium ⭐⭐⭐\n")
 
-        print(f"\n Buscando sala 🎭🎬...")
-        butacas = butaca_dao.butacas_por_sala(sala.id_sala) # Obtenemos todas las butacas de la sala con el ID dado.
-        print("\nSeleccione su butaca: 🪑🍿 ")
+        for fila in range(1, 13):  # Filas de 1 a 12
+            print(f"{fila}\t", end="")  # Imprime el número de fila
+            for columna in range(1, 13):  # Columnas de 1 a 12
 
+<<<<<<< Updated upstream
         for fila in range(1, 13): # Recorremos las filas de la matriz de butacas, de 1 a 12.
             print(f"{fila}\t", end="") # Mostramos el número de cada fila. /t es un tabulador.
             for columna in range(1, 13): # Recorremos las columnas, de 1 a 12.
@@ -49,6 +59,35 @@ class CineServices:
                 print(f"[{estado}]", end=" ") # Mostramos la butaca en forma visual. end=" " separa los elementos en la misma línea.
             print(f"\n") # Cambiamos de fila.
         print("") # Salto de línea para separar la matriz de butacas de la información del cliente.
+=======
+                estado = "P" if fila in [6, 7, 8] and self.butaca_esta_disponible(butacas, fila, columna) else "X" if not self.butaca_esta_disponible(butacas, fila, columna) else " "
+
+                # Manejo especial para columnas 3 y 4 en filas 6, 7 y 8 (premium)
+                if columna == 3 and fila in [6, 7, 8]:
+                    print(f"[{estado}] [Esca", end="")
+                elif columna == 4 and fila in [6, 7, 8]:
+                    print(f"lera] [{estado}] ", end="")
+                # Manejo especial para columnas 9 y 10 en filas 6, 7 y 8 (premium)
+                elif columna == 9 and fila in [6, 7, 8]:
+                    print(f"[{estado}] [Esca", end="")
+                elif columna == 10 and fila in [6, 7, 8]:
+                    print(f"lera] [{estado}] ", end="")
+                # Manejo general para columnas 3 y 4 (escaleras)
+                elif columna == 3:
+                    print(f"[{estado}] [Esca", end="")
+                elif columna == 4:
+                    print(f"lera] [{estado}] ", end="")
+                # Manejo general para columnas 9 y 10 (escaleras)
+                elif columna == 9:
+                    print(f"[{estado}] [Esca", end="")
+                elif columna == 10:
+                    print(f"lera] [{estado}] ", end="")
+                else:
+                    print(f"[{estado}]", end=" ")
+
+            print(f"\n")  # Salto de línea al final de cada fila
+        print("")
+>>>>>>> Stashed changes
 
     def seleccionar_combos(self, candy_dao: CandyDAO):
         # Mostramos el menú de combos y permitimos al usuario seleccionar cuántos combos desea agregar.
@@ -60,6 +99,7 @@ class CineServices:
 
         print("¿Deseas comprar un combo de pochoclos y bebidas? \n")
         while True:  # Permitimos que el usuario elija múltiples combos.
+
             print("0. No agregar combo")  # Opción de no agregar más combos.
             for idx, tipo in enumerate(TipoCandy, start=1):  # Enumeramos los combos disponibles.
                 print(f"{idx}. {tipo.get_nombre()} - Precio: {tipo.get_precio()}")  # Mostramos el nombre y el precio del combo.
@@ -72,8 +112,8 @@ class CineServices:
                 elif 1 <= opcion <= len(TipoCandy):  # Verificamos si la opción está dentro del rango válido.
                     combo_seleccionado = list(TipoCandy)[opcion - 1]  # Obtenemos el combo seleccionado.
                     combos_seleccionados.append(combo_seleccionado)  # Agregamos el combo a la lista.
-
-                    print(f"😄 Combo '{combo_seleccionado.get_nombre()}' agregado.")
+                    self.limpiar_pantalla()
+                    print(f"\n😄 Combo '{combo_seleccionado.get_nombre()}' agregado.")
                     print("\n 🍿  Deseas agregar otro combo?\n")
 
                 else:
@@ -85,6 +125,7 @@ class CineServices:
 
     def elegir_pelicula(self, pelicula_dao: PeliculaDAO): # Este método muestra al usuario todas las películas disponibles y le permite elegir una.
         try:
+<<<<<<< Updated upstream
             print("\n=== 🎬🎞️  Selecciona una Película 🎥 ===")
 
     def verificar_cliente(self, cliente_dao: ClienteDAO):
@@ -126,6 +167,9 @@ class CineServices:
     def elegir_pelicula(self, pelicula_dao: PeliculaDAO): # Este método muestra al usuario todas las películas disponibles y le permite elegir una.
         try:
             print("\n=== Selecciona una Película ===")
+=======
+            print("\n=== Selecciona una Película 🎥 ===\n")
+>>>>>>> Stashed changes
 
             peliculas = pelicula_dao.obtener_todas() # Obtenemos todas las películas disponibles de la base de datos.
             for idx, pelicula in enumerate(peliculas, start=1): # Enumeramos las películas desde 1 para facilitar la elección.
@@ -135,8 +179,12 @@ class CineServices:
             while True: # Repetimos hasta que el usuario seleccione una película válida.
                 try:
 
+<<<<<<< Updated upstream
                     opcion = int(input(f" 🎥 Seleccione una película (1-{len(peliculas)}): ")) # Pedimos al usuario que seleccione la película por su número.
                     opcion = int(input(f"Seleccione una película (1-{len(peliculas)}): ")) # Pedimos al usuario que seleccione la película por su número.
+=======
+                    opcion = int(input(f"\n 🎥 Seleccione una película (1-{len(peliculas)}): ")) # Pedimos al usuario que seleccione la película por su número.
+>>>>>>> Stashed changes
 
                     if 1 <= opcion <= len(peliculas): # Verificamos que la opción esté dentro del rango mostrado.
                         return peliculas[opcion - 1] # Retornamos la película seleccionada (se ajusta el índice a base 0).
@@ -167,7 +215,7 @@ class CineServices:
 
             cantidad_butacas_disponibles = butaca_dao.cantidad_butacas_disponibles(salas[0].id_sala) # Consultamos cuántas butacas disponibles hay en la sala.
             cantidad_entradas = int(input("🎫✨ ¿Cuántas entradas desea comprar? ")) # Preguntamos cuántas entradas desea comprar.
-            
+
             if cantidad_entradas <= 0 or cantidad_entradas > cantidad_butacas_disponibles: # Validamos que haya suficientes butacas disponibles.
                 print(f"❌ No hay suficientes entradas disponibles.")
                 return None, 0 # Retornamos valores nulos si no hay disponibilidad.
@@ -194,7 +242,7 @@ class CineServices:
                     print("⚠️ Fila y columna deben estar entre 1 y 12. Intente nuevamente.")  # Mostramos un error si la ubicación no es válida.
             except ValueError:
                 print("⚠️ Entrada inválida. Por favor ingrese números para fila y columna.")  # Mostramos un error si el usuario ingresa caracteres no numéricos.
-    
+
     def butaca_esta_disponible(self, butacas: list[Butaca], fila: int, columna: int) -> bool:
         # Este método verifica si una butaca específica está disponible (sin ocupar).
         for butaca in butacas:  # Recorremos cada butaca en la lista de butacas.
@@ -237,7 +285,7 @@ class CineServices:
                 butacas_seleccionadas.append(butaca_seleccionada)
                 break
         return butacas_seleccionadas  # Retornamos la lista de butacas seleccionadas.
-    
+
     def obtener_precio_por_categoria(categoria):
         # Este método obtiene el precio de una butaca según su categoría (tipo).
         try:
@@ -283,8 +331,13 @@ class CineServices:
                                 continue  # Volvemos a pedir el nombre si no es válido.
                             break  # Salimos del bucle si el nombre es válido.
 
+<<<<<<< Updated upstream
                         # Validamos el apellido ingresado siguiendo el mismo procedimiento que para el nombre.
                         while True:
+=======
+                # Validamos el apellido ingresado siguiendo el mismo procedimiento que para el nombre.
+                while True:
+>>>>>>> Stashed changes
 
                             apellido = input("\n ✍️  Ahora ingresá tu apellido: ").strip()  # Pedimos el apellido del cliente.
 
@@ -307,9 +360,24 @@ class CineServices:
                         cliente = Cliente(None, dni, nombre, apellido, email)
                         cliente_dao.crear_cliente(cliente)  # Registramos al cliente en la base de datos.
 
+<<<<<<< Updated upstream
                         # Verificamos que el cliente se haya registrado correctamente.
                         cliente_creado = cliente_dao.buscar_por_dni(dni)  # Buscamos nuevamente al cliente por su DNI.
                         if cliente_creado:  # Si el cliente fue creado correctamente, damos la bienvenida.
+=======
+                # Verificamos que el cliente se haya registrado correctamente.
+                cliente_creado = cliente_dao.buscar_por_dni(dni)  # Buscamos nuevamente al cliente por su DNI.
+                if cliente_creado:  # Si el cliente fue creado correctamente, damos la bienvenida.
+                    print(f" 😄🎉  Cliente registrado correctamente. ¡Bienvenido {cliente_creado.nombre} {cliente_creado.apellido}!")
+                    return cliente_creado  # Retornamos el cliente registrado.
+
+                elif opcion == "n":  # Si el usuario no desea registrarse, mostramos un mensaje y retornamos None.
+                    print(" 💔 Debe registrarse para continuar con la compra.")
+                    return None
+
+                else:  # Si la opción ingresada no es válida, mostramos un error.
+                    print("❌ Opción inválida. Intente nuevamente.")
+>>>>>>> Stashed changes
 
                             print(f" 😄🎉  Cliente registrado correctamente. ¡Bienvenido {cliente_creado.nombre} {cliente_creado.apellido}!")
 
@@ -327,9 +395,3 @@ class CineServices:
             print(f"⚠ Error con los valores ingresados: {ve}")
         except Exception as e:  # Capturamos cualquier otro error crítico.
             print(f"⚠ Error crítico durante la verificación de cliente: {e}")
-
-    def limpiar_pantalla(self):
-        # Este método limpia la consola para que la experiencia del usuario sea más ordenada y agradable.
-        import os  # Importamos el módulo `os` que nos permite acceder a comandos del sistema operativo.
-        os.system('cls' if os.name == 'nt' else 'clear')
-        # Usamos el comando `cls` si estamos en Windows (`nt`) o `clear` si estamos en Linux/Mac.
