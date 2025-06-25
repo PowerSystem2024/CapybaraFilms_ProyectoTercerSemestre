@@ -30,11 +30,13 @@ def main():
         pelicula = None  # Inicializamos la variable película
 
         # Mostrar mensaje de bienvenida
-        print("-----------------------------------------------------------------")
-        print("*        🎥 🎞️  Bienvenido/a a Capybara's Films!  🍿🎬         *")
-        print("-----------------------------------------------------------------\n")
-        print("*       🍿📽️  Disfruta de la mejor experiencia de cine.  😄🌟   *")
+        cine_services.limpiar_pantalla()  # Limpia pantalla
+        print("----------------------------------------------------------------------------------------")
+        print("*                    🎥 🎞️  Bienvenido/a a Capybara's Films!  🍿🎬                   *")
+        print("----------------------------------------------------------------------------------------\n")
+        print("*                 🍿📽️  Disfruta de la mejor experiencia de cine.  😄🌟              *")
         print("\nA continuación ingresa tus datos para adquirir las entradas 🎫 a la función de cine.\n")
+        print("----------------------------------------------------------------------------------------\n")
 
         # Paso 1: Verificar o registrar cliente
         cliente = cine_services.verificar_y_validar_cliente(cliente_dao)
@@ -89,8 +91,9 @@ def main():
         reserva.mostrar_resumen()
 
         # Mensaje final al usuario
+        print("----------------------------------------------------------------------------")
         print(f"🌟🤗  ¡Compra exitosa! Gracias por visitar Capybara Films, {cliente.nombre}. 🎉")
-
+        print("----------------------------------------------------------------------------\n\n")
     except Exception as e:
         # Captura de errores generales del programa
         print(f"⚠ Se produjo un error crítico en la aplicación: {e}")

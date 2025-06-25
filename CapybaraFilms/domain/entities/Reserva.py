@@ -66,9 +66,9 @@ class Reserva:
         """
         from services.cine_services import CineServices
         try:
-            print("\n----------------------------------------------")
-            print("--           Resumen de la Reserva           --")
-            print("----------------------------------------------")
+            print("\n----------------------------------------------------------------------")
+            print("--                       Resumen de la Reserva                      --")
+            print("----------------------------------------------------------------------")
             print(f"Cliente: {self.cliente.get_nombre()} {self.cliente.get_apellido()}")
             print(f"Correo electrónico: {self.cliente.get_email()}")
             print(f"Sala asignada: {self.sala.id_sala}")
@@ -80,24 +80,24 @@ class Reserva:
                 # Usar la función `obtener_precio_por_categoria` desde cine_services
                 precio = CineServices.obtener_precio_por_categoria(butaca.get_categoria())
                 total_butacas += precio
-                print(f" - Fila: {butaca.get_fila()}, Columna: {butaca.get_columna()} | Categoria: {butaca.get_categoria()} | Precio: {precio}")
+                print(f" - Fila: {butaca.get_fila()}, Columna: {butaca.get_columna()} | Categoria: {butaca.get_categoria()} | Precio: $ {precio}")
 
             # Combos seleccionados
             print("\nCombos Seleccionados:")
             total_combos = 0  # Para acumular el precio de los combos seleccionados
             if self.candy:
                 for candy in self.candy:
-                    print(f" - {candy.get_nombre()} | Precio: {candy.get_precio()}")
+                    print(f" - {candy.get_nombre()} | Precio: $ {candy.get_precio()}")
                     total_combos += candy.get_precio()
             else:
                 print("No se seleccionaron combos.")
             
             # Calcular el total general
             total = total_butacas + total_combos
-            print("\n----------------------------------------------")
-            print(f"Total a Pagar: {total}")
-            print("----------------------------------------------")
-            print(f"Usted recibirá su comprobante al correo electrónico: {self.cliente.get_email()}\n")
+            print("\n----------------------------------------------------------------------")
+            print(f"Total a Pagar: $ {total}")
+            print("----------------------------------------------------------------------\n")
+            print(f"Usted recibirá su comprobante al correo electrónico: {self.cliente.get_email()}\n\n")
 
         except Exception as e:
             print(f"Error al mostrar el resumen de la reserva: {e}")
