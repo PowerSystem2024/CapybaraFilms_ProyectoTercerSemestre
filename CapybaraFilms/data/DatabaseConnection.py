@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2 import OperationalError, DatabaseError
 from contextlib import contextmanager
 class DatabaseConnection:
-    def __init__(self, database="railway", user="postgres", password="CMsvUmqcrlOYJmQinWIJdJqKRjvAXOgr", host="turntable.proxy.rlwy.net", port="44390"):
+    def __init__(self, database="railway", user="postgres", password="eeNfeLjGqTumwIOKqEDCVTjqHnUzpnuX", host="crossover.proxy.rlwy.net", port="55022"):
         """
         Constructor de la conexión a la base de datos.
         Se inicializa con los parámetros para conectarse a PostgreSQL.
